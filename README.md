@@ -20,12 +20,14 @@ Manual or fragmented scheduling of campus spaces often leads to conflicts, ineff
 - Tools & Libraries: Flutter and Firebase
 
 ## Project Structure
+```
 campus-space-scheduler/
 ├── docs/
 ├── src/
 ├── README.md
 ├── CONTRIBUTING.md
 └── .gitignore
+```
 
 ## Branching Rules
 - Do NOT work directly on the `main` branch.
