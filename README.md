@@ -1,6 +1,6 @@
 # Campus Space Scheduler
 
-Campus Space Scheduler is a web-based system designed to manage and schedule the booking of academic spaces such as classrooms, laboratories, and halls within a campus. It helps avoid scheduling conflicts, improves space utilization, and provides a centralized platform for students, faculty, and administrators.
+Campus Space Scheduler is a cross-platform, mobile-first campus space scheduling system developed using Flutter and Firebase designed to manage and schedule the booking of academic spaces such as classrooms, laboratories, and halls within a campus. It helps avoid scheduling conflicts, improves space utilization, and provides a centralized platform for students, faculty, and administrators.
 
 ## Problem Statement
 Manual or fragmented scheduling of campus spaces often leads to conflicts, inefficient utilization, and lack of transparency. This system aims to provide a structured and automated solution for managing campus space bookings.
