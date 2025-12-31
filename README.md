@@ -21,10 +21,15 @@ Manual or fragmented scheduling of campus spaces often leads to conflicts, ineff
 
 ## Project Structure
 campus-space-scheduler/
+
 ├── docs/              # Documentation
+
 ├── src/               # Source code
+
 ├── README.md
+
 ├── CONTRIBUTING.md
+
 └── .gitignore
 
 ## Branching Rules
