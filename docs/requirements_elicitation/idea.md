@@ -24,13 +24,14 @@
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
-- The System shall allow students/faculty to login to the application using college mail id.
+- The system shall allow students/faculty to login to the application using college mail id.
 - Allow users to view real-time availability of campus spaces.
 - Allow users to book classrooms, laboratories, and halls.
 - Display schedule details including date, time, and purpose.
-- Automatically assign the appropriate in-charge based on the selected space.
+- Automatically assign the appropriate in-charge based on the selected space and time.
 - Allow administrators to edit space and schedule details.
 - Provide booking status updates (approved / pending / rejected). (optional)
+- The system shall allow admin to manage conflicted bookings.
 ### 2.2 Non-Functional Requirements
 - Provide a quick response time for viewing availability and booking.
 - Shall have an easy-to-use interface suitable for mobile devices.
