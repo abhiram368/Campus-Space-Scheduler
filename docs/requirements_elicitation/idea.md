@@ -44,4 +44,18 @@
 - Automatic allotment of lab/hall in-charge
 - Role-based access (student / faculty / admin)
 - Store and retrieve booking data reliably (Firebase)
+### 3.2 Should Have (Important but not critical)
+- Booking status display (pending / approved / rejected)
+- Easy editing of booking and space details by admin
+- Quick response time optimization
+- Basic validation and error handling
+### 3.3 Could Have (Optional / Enhancements)
+- Space location display on campus map
+- Notifications for booking updates
+- Advanced search and filters
+- Usage analytics for administrators
+### 3.4 Won’t Have (For current version)
+- iOS or Web deployment
+- Integration with external university systems
+- Payment or fee handling
 ## 4. Categorize Feasibility
