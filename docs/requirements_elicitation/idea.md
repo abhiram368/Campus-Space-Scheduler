@@ -3,13 +3,15 @@
 ## 1. Identify Stakeholders
 ### Primary Stakeholders
 1. Students
-    - View available spaces
+    - View available spaces (classrooms/labs/halls)
     - Make booking requests
     - Track booking status
-2. Faculty
-    - Book classrooms/labs/halls
     - View schedules
-    - Manage their own bookings
+2. Faculty
+    - View available spaces (classrooms/labs/halls)
+    - Make booking requests
+    - Track booking status
+    - View schedules
 ### Secondary Stakeholders
 3. Department / Lab In-Charge
     - Approve or manage bookings
@@ -17,26 +19,26 @@
     - Update room details
 4. Administrator
     - Manage users and roles
-    - Configure spaces (labs, halls, classrooms)
+    - Configure spaces (classrooms/labs/halls)
     - Oversee system usage
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
-- The system shall allow users to view real-time availability of campus spaces.
-- The system shall allow authorized users to book classrooms, laboratories, and halls.
-- The system shall display schedule details including date, time, and purpose.
-- The system shall automatically assign the appropriate in-charge based on the selected space.
-- The system shall allow administrators to edit space and schedule details.
-- The system shall provide booking status updates (approved / pending / rejected). (optional)
+- Allow users to view real-time availability of campus spaces.
+- Allow authorized users to book classrooms, laboratories, and halls.
+- Display schedule details including date, time, and purpose.
+- Automatically assign the appropriate in-charge based on the selected space.
+- Allow administrators to edit space and schedule details.
+- Provide booking status updates (approved / pending / rejected). (optional)
 ### 2.2 Non-Functional Requirements
-- The system shall provide a quick response time for viewing availability and booking.
-- The system shall have an easy-to-use interface suitable for mobile devices.
-- The system shall ensure reliable data storage and retrieval.
-- The system shall support simultaneous access by multiple users.
+- Provide a quick response time for viewing availability and booking.
+- Shall have an easy-to-use interface suitable for mobile devices.
+- Shall ensure reliable data storage and retrieval.
+- Support simultaneous access by multiple users.
 ### 2.3 Optional / Enhancement Requirements
-- The system may display the location of spaces on a campus map.
-- The system may provide notifications for booking updates.
-- The system may support future expansion to web or iOS platforms.
+- Display the location of spaces on a campus map.
+- Provide notifications for booking updates.
+- Support future expansion to web or iOS platforms.
 
 ## 3. Prioritize Requirements
 ### 3.1 Must Have (Core requirements)
