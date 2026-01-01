@@ -1,4 +1,5 @@
 # Steps of Requirements Elicitation
+
 ## 1. Identify Stakeholders
 ### Primary Stakeholders
 1. Students
@@ -18,6 +19,7 @@
     - Manage users and roles
     - Configure spaces (labs, halls, classrooms)
     - Oversee system usage
+
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
 - The system shall allow users to view real-time availability of campus spaces.
@@ -35,6 +37,7 @@
 - The system may display the location of spaces on a campus map.
 - The system may provide notifications for booking updates.
 - The system may support future expansion to web or iOS platforms.
+
 ## 3. Prioritize Requirements
 ### 3.1 Must Have (Core requirements)
 - View real-time availability of classrooms, labs, and halls
@@ -58,4 +61,45 @@
 - iOS or Web deployment
 - Integration with external university systems
 - Payment or fee handling
+
 ## 4. Categorize Feasibility
+### 4.1 Technical Feasibility
+| Requirement                   | Feasibility         | Remarks                         |
+|-------------------------------|---------------------|---------------------------------|
+| Real-time availability        | Feasible            | Firebase real-time updates      |
+| Booking                       | Feasible            | Firestore CRUD                  |
+| Conflict prevention           | Feasible            | Time-slot validation            |
+| Automated in-charge allotment | Feasible            | Rule-based mapping              |
+| Booking status                | Feasible            | Simple state management         |
+| Campus map view               | Partially feasible  | Requires map API integration    |
+### 4.2 Operational Feasibility
+| Aspect         | Feasibility | Remarks                                  |
+|----------------|-------------|------------------------------------------|
+| Ease of use    | Feasible    | Mobile-friendly Flutter UI               |
+| User acceptance| Feasible    | Similar to existing booking practices    |
+| Admin control  | Feasible    | Role-based access supported              |
+### 4.3 Economic Feasibility
+| Factor              | Feasibility | Remarks                      |
+|---------------------|-------------|------------------------------|
+| Development cost    | Feasible    | Open-source tools            |
+| Infrastructure cost | Feasible    | Firebase free tier           |
+| Maintenance cost    | Feasible    | Minimal for academic use     |
+
+### 4.4 Schedule Feasibility
+| Phase            | Feasibility     | Remarks                        |
+|------------------|-----------------|--------------------------------|
+| Core features    | Feasible        | Achievable within semester     |
+| Optional features| Time-dependent  | Implement if time permits      |
+### 4.5 Legal and Ethical Feasibility
+| Aspect        | Feasibility | Remarks                                       |
+|---------------|-------------|-----------------------------------------------|
+| Data privacy  | Feasible    | Uses Firebase Authentication                  |
+| Licensing     | Feasible    | Flutter & Firebase are free for academic use  |
+
+## 5. Constraints and Assumptions
+- Only campus users with verified IDs can book spaces.
+- The system is developed as a college academic project.
+- The initial deployment targets Android devices.
+- Internet connectivity is required for system usage.
+## 6. Summary
+The elicited requirements define the core functionality and constraints of the Campus Space Scheduler and serve as the foundation for system design and development.
