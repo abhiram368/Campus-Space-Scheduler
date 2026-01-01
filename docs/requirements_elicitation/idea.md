@@ -32,14 +32,15 @@
 - Allow administrators to edit space and schedule details.
 - Provide booking status updates (approved / pending / rejected). (optional)
 - The system shall allow admin to manage conflicted bookings.
+- Provide notifications for booking updates.
 ### 2.2 Non-Functional Requirements
 - Provide a quick response time for viewing availability and booking.
+- Quick updation of availability of space in real time.
 - Shall have an easy-to-use interface suitable for mobile devices.
 - Shall ensure reliable data storage and retrieval.
 - Support simultaneous access by multiple users.
 ### 2.3 Optional / Enhancement Requirements
 - Display the location of spaces on a campus map.
-- Provide notifications for booking updates.
 - Support future expansion to web or iOS platforms.
 
 ## 3. Prioritize Requirements
