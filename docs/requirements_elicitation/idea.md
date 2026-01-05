@@ -8,14 +8,14 @@ Students & Faculty
 - Track booking status
 - View schedules
 ### Secondary Stakeholders
-3. Department / Lab In-Charge
-    - Approve or manage bookings
-    - Handle conflicts
-    - Update room details
-4. Administrator
-    - Manage users and roles
-    - Configure spaces (classrooms/labs/halls)
-    - Oversee system usage
+Department / Lab In-Charge
+- Approve or manage bookings
+- Handle conflicts
+- Update room details
+Administrator
+- Manage users and roles
+- Configure spaces (classrooms/labs/halls)
+- Oversee system usage
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
