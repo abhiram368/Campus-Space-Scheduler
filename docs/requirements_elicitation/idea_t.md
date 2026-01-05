@@ -45,7 +45,7 @@
 
 ### **FR-5: Booking Request Submission**
 
-* The system shall allow authorized users to submit booking requests.
+* The system shall allow users to submit booking requests.
 * Booking requests shall include:
 
   * Space (lab/hall)
