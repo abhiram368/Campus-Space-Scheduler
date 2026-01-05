@@ -48,7 +48,7 @@
 * The system shall allow users to submit booking requests.
 * Booking requests shall include:
 
-  * Space (lab/hall)
+  * Space (lab/hall/class)
   * Date and time
   * Purpose of booking
 
@@ -60,7 +60,7 @@
 * If multiple requests are submitted for the same slot:
 
   * Only one request shall be approved.
-  * Remaining requests shall be rejected with a reason message.
+  * Remaining requests can be rejected by lab-incharge with a reason message.
 
 ---
 
@@ -90,6 +90,7 @@
 
   * Users when a request is submitted, approved, or rejected
   * Lab In-Charge when a new booking request is pending
+  * Assigned faculty or student when they are assigned to a space
 
 ---
 
@@ -97,7 +98,7 @@
 
 * The Administrator shall be able to:
 
-  * Add or remove labs and halls
+  * Add or remove labs, halls and classrooms
   * Configure instructional hours
   * View all booking activities
 
