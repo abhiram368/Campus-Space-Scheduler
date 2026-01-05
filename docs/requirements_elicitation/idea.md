@@ -8,11 +8,11 @@ Students and Faculty
 - Track booking status (approved / pending / rejected)
 - View schedules
 ### Secondary Stakeholders
-Department / Lab In-Charge
+1. Department / Lab In-Charge
 - Approve or manage bookings
 - Handle conflicts
 - Update room details
-App Admin
+2. App Admin
 - Manage users and roles
 - Configure spaces (classrooms/labs/halls)
 - Oversee system usage
