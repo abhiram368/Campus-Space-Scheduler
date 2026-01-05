@@ -98,7 +98,11 @@ You can **directly paste this** into your SRS / report.
 * The system shall allow users to submit booking requests.
 * Booking requests shall include:
 
+<<<<<<< HEAD
   * Space (lab / hall / classroom)
+=======
+  * Space (lab/hall/class)
+>>>>>>> 59ad592d229b2fd40593e44fec0eb8678b8507a8
   * Date and time
   * Purpose of booking
 
@@ -110,7 +114,11 @@ You can **directly paste this** into your SRS / report.
 * If multiple requests are submitted for the same slot:
 
   * Only one request shall be approved.
+<<<<<<< HEAD
   * Remaining requests may be rejected by the Lab In-Charge with a reason message.
+=======
+  * Remaining requests can be rejected by lab-incharge with a reason message.
+>>>>>>> 59ad592d229b2fd40593e44fec0eb8678b8507a8
 
 ---
 
@@ -137,7 +145,11 @@ You can **directly paste this** into your SRS / report.
 
   * Users when a request is submitted, approved, or rejected
   * Lab In-Charge when a new booking request is pending
+<<<<<<< HEAD
   * Assigned faculty or student when they are allotted to a space
+=======
+  * Assigned faculty or student when they are assigned to a space
+>>>>>>> 59ad592d229b2fd40593e44fec0eb8678b8507a8
 
 ---
 
@@ -145,7 +157,11 @@ You can **directly paste this** into your SRS / report.
 
 * The Administrator shall be able to:
 
+<<<<<<< HEAD
   * Add or remove labs, halls, and classrooms
+=======
+  * Add or remove labs, halls and classrooms
+>>>>>>> 59ad592d229b2fd40593e44fec0eb8678b8507a8
   * Configure instructional hours
   * View all booking activities
 
