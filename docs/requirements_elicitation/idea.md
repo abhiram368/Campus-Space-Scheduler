@@ -3,10 +3,10 @@
 ## 1. Identify Stakeholders
 ### Primary Stakeholders
 Students & Faculty
-    - View available spaces (classrooms/labs/halls)
-    - Make booking requests
-    - Track booking status
-    - View schedules
+- View available spaces (classrooms/labs/halls)
+- Make booking requests
+- Track booking status
+- View schedules
 ### Secondary Stakeholders
 3. Department / Lab In-Charge
     - Approve or manage bookings
