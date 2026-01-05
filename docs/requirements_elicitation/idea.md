@@ -5,23 +5,23 @@
 Students and Faculty
 - View available spaces (classrooms/labs/halls)
 - Make booking requests
-- Track booking status
+- Track booking status (approved / pending / rejected)
 - View schedules
 ### Secondary Stakeholders
 Department / Lab In-Charge
 - Approve or manage bookings
 - Handle conflicts
 - Update room details
-Administrator
+App Admin
 - Manage users and roles
 - Configure spaces (classrooms/labs/halls)
 - Oversee system usage
 
 ## Hierarchy
 - Category-1: Students and Faculty
-- Category-2: Lab admin (student or faculty)
-- Category-3: Lab incharge (faculty)
-- Category-4: App admin
+- Category-2: Lab Admin (student or faculty)
+- Category-3: Lab In-Charge (faculty)
+- Category-4: App Admin
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
