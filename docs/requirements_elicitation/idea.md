@@ -18,10 +18,10 @@ Administrator
 - Oversee system usage
 
 ## Hierarchy
-Category-1: Students and Faculty
-Category-2: Lab admin (student or faculty)
-Category-3: Lab incharge (faculty)
-Category-4: App admin
+- Category-1: Students and Faculty
+- Category-2: Lab admin (student or faculty)
+- Category-3: Lab incharge (faculty)
+- Category-4: App admin
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
