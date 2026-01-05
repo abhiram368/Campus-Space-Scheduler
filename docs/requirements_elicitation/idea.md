@@ -2,7 +2,7 @@
 
 ## 1. Identify Stakeholders
 ### Primary Stakeholders
-Students & Faculty
+Students and Faculty
 - View available spaces (classrooms/labs/halls)
 - Make booking requests
 - Track booking status
@@ -16,6 +16,12 @@ Administrator
 - Manage users and roles
 - Configure spaces (classrooms/labs/halls)
 - Oversee system usage
+
+## Hierarchy
+Category-1: Students and Faculty
+Category-2: Lab admin (student or faculty)
+Category-3: Lab incharge (faculty)
+Category-4: App admin
 
 ## 2. Gather Requirements
 ### 2.1 Functional Requirements
