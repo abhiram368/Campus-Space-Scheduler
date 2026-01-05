@@ -2,12 +2,7 @@
 
 ## 1. Identify Stakeholders
 ### Primary Stakeholders
-1. Students
-    - View available spaces (classrooms/labs/halls)
-    - Make booking requests
-    - Track booking status
-    - View schedules
-2. Faculty
+Students & Faculty
     - View available spaces (classrooms/labs/halls)
     - Make booking requests
     - Track booking status
