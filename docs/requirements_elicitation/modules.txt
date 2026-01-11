@@ -1,0 +1,17 @@
+Somu:
+Hall In-Charge
+Lab Admin
+
+Teja:
+Faculty
+Student
+
+Venkat:
+Staff In-Charge
+Faculty In-Charge
+HoD
+
+Abhiram:
+App Admin
+
+Csed Office Staff
