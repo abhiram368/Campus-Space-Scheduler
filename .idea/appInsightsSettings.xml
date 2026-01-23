@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.campus_space_scheduler" />
+                  <option name="mobileSdkAppId" value="1:912074136407:android:95e471257e8b8426923c12" />
+                  <option name="projectId" value="campus-space-scheduler" />
+                  <option name="projectNumber" value="912074136407" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
