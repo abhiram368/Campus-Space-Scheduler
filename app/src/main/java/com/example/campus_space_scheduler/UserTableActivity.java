@@ -121,15 +121,17 @@ public class UserTableActivity extends AppCompatActivity {
 
         List<DataNode> filtered = new ArrayList<>();
 
+        String q = query == null ? "" : query.toLowerCase();
+
         for (DataNode node : fullList) {
 
             String primary = node.model.getPrimaryValue(mode);
             String secondary = node.model.getSecondaryValue(mode);
 
-            primary = primary == null ? "" : primary;
-            secondary = secondary == null ? "" : secondary;
+            primary = primary == null ? "" : primary.toLowerCase();
+            secondary = secondary == null ? "" : secondary.toLowerCase();
 
-            if (primary.contains(query.toLowerCase()) || secondary.contains(query.toLowerCase())) {
+            if (primary.contains(q) || secondary.contains(q)) {
                 filtered.add(node);
             }
         }
@@ -144,10 +146,22 @@ public class UserTableActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to remove this?")
                 .setPositiveButton("Remove", (dialog, which) -> {
 
-                    FirebaseDatabase.getInstance()
+                    DatabaseReference ref = FirebaseDatabase.getInstance()
                             .getReference("USER".equals(mode) ? "users" : "spaces")
-                            .child(key)
-                            .removeValue();
+                            .child(key);
+
+                    ref.removeValue().addOnSuccessListener(v -> {
+
+                        for (int i = 0; i < fullList.size(); i++) {
+                            if (fullList.get(i).key.equals(key)) {
+                                fullList.remove(i);
+                                break;
+                            }
+                        }
+
+                        filterTable(binding.searchView.getQuery().toString());
+
+                    });
 
                 })
                 .setNegativeButton("Cancel", null)
