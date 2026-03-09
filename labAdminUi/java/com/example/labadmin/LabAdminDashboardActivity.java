@@ -48,7 +48,7 @@ public class LabAdminDashboardActivity extends AppCompatActivity {
             }
         });
 
-        animateBackground();
+        // Background animation removed as it might cause a black screen if not handled correctly
     }
 
     private void loadAssignedBooking() {
@@ -77,14 +77,5 @@ public class LabAdminDashboardActivity extends AppCompatActivity {
                 Toast.makeText(LabAdminDashboardActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void animateBackground() {
-        View bgView = findViewById(android.R.id.content);
-        if (bgView != null) {
-            bgView.animate().alpha(0.85f).setDuration(3000).withEndAction(() -> {
-                bgView.animate().alpha(1.0f).setDuration(3000).withEndAction(this::animateBackground).start();
-            }).start();
-        }
     }
 }
