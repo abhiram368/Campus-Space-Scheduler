@@ -14,7 +14,7 @@
         android:theme="@style/Theme.LabAdmin">
 
         <activity
-            android:name=".LabAdminDashboardActivity"
+            android:name=".RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +22,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".LabAdminDashboardActivity" android:exported="false" />
+        <activity android:name=".HallInchargeDashboardActivity" android:exported="false" />
+        <activity android:name=".PendingRequestsActivity" android:exported="false" />
+        <activity android:name=".RequestDetailsActivity" android:exported="false" />
+        <activity android:name=".LiveStatusActivity" android:exported="false" />
+        <activity android:name=".ViewScheduleActivity" android:exported="false" />
+        <activity android:name=".ApprovalHistoryActivity" android:exported="false" />
+        <activity android:name=".HallListActivity" android:exported="false" />
+        <activity android:name=".HallDetailsActivity" android:exported="false" />
+        <activity android:name=".EditHallActivity" android:exported="false" />
         <activity android:name=".ReassignActivity" android:exported="false" />
         <activity android:name=".ReportIssueActivity" android:exported="false" />
         <activity android:name=".AssignedSessionDetailsActivity" android:exported="false" />
