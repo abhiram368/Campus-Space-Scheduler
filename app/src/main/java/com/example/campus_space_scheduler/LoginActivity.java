@@ -41,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnLogin.setOnClickListener(v -> emailLogin());
         binding.btnGoogle.setOnClickListener(v -> googleLogin());
+        binding.tvForgotPass.setOnClickListener(v ->
+                startActivity(new Intent(this, ForgotPasswordActivity.class)));
+
+        binding.tvSignUp.setOnClickListener(v ->
+                startActivity(new Intent(this, SignUpActivity.class)));
     }
 
     // ------------------------------------------------
@@ -109,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(snapshot -> {
 
                     if(snapshot.exists()){
-
+                        LogHelper.log("LOGIN", user.getEmail() + " logged in");
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
 
