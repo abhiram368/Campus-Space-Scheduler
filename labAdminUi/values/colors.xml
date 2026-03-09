@@ -22,6 +22,14 @@
     <color name="danger_action">#E84A5F</color>
     <color name="danger_bg_opaque">#2A1D2B</color>
 
+    <!-- New Action Colors -->
+    <color name="success_action">#00E676</color>
+    <color name="success_bg_opaque">#1B2E24</color>
+    <color name="warning_action">#FFD600</color>
+    <color name="warning_bg_opaque">#2E2A1B</color>
+    <color name="info_action">#00B0FF</color>
+    <color name="accent_purple">#D500F9</color>
+
     <!-- Text Colors -->
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#8E9BB1</color>
