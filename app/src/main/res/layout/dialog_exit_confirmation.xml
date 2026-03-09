@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Are you sure you want to exit?"
+        android:text="Are you sure you want to Logout?"
         android:textColor="#FFFFFF"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -55,7 +55,7 @@
         android:id="@+id/btnConfirmExit"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Yes, Exit Booking"
+        android:text="Yes, Logout"
         android:textAllCaps="false"
         android:textStyle="bold"
         app:backgroundTint="#EF4444"
