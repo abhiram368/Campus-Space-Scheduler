@@ -1,11 +1,10 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.campus_space_scheduler.R;
 import com.example.campus_space_scheduler.databinding.ActivityAdminManagementBinding;
 import com.example.campus_space_scheduler.databinding.DialogAddItemBinding;
 import com.google.android.material.button.MaterialButton;

@@ -35,33 +35,22 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".AdminActivity"
+            android:name=".app_admin.AdminActivity"
             android:exported="true"/>
-        <activity android:name=".AdminManagementActivity" />
 <!--        <activity android:name=".AdminScheduleManagementActivity" />-->
-        <activity android:name=".ViewLogsActivity" />
-        <activity android:name=".UserTableActivity" />
-        <activity android:name=".ScheduleEditorActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".ScheduleCalendarActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".HourlyGridActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".SpaceSelectionActivity" />
+        <activity android:name=".app_admin.ViewLogsActivity" />
+        <activity android:name=".app_admin.UserTableActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".BookingUserActivity" />
+        <activity android:name=".booking_user.BookingUserActivity" />
         <activity android:name=".OtherUserActivity" />
         <activity android:name=".EditScheduleActivity" />
         <activity android:name=".ViewScheduleActivity" />
         <activity android:name=".DetailedViewScheduleActivity" />
         <activity android:name=".BaseScheduleSelectorActivity"/>
         <activity android:name=".WeekScheduleActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ApprovalHierarchyActivity" />
+        <activity android:name=".app_admin.ProfileActivity" />
+        <activity android:name=".app_admin.ApprovalHierarchyActivity" />
 
 
     </application>

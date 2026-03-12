@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.campus_space_scheduler.ForgotPasswordActivity;
+import com.example.campus_space_scheduler.helper.LogHelper;
+import com.example.campus_space_scheduler.LoginActivity;
+import com.example.campus_space_scheduler.R;
 import com.example.campus_space_scheduler.databinding.FragmentSettingsBinding;
 import com.example.campus_space_scheduler.databinding.ItemSettingsRowBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;

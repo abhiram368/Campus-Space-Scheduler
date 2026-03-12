@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -8,8 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.campus_space_scheduler.utils.FirebaseUtils;
-import com.google.firebase.database.DataSnapshot;
+import com.example.campus_space_scheduler.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

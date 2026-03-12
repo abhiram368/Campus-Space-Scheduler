@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.campus_space_scheduler.databinding.ActivityForgotPasswordBinding;
+import com.example.campus_space_scheduler.helper.LogHelper;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPasswordActivity extends AppCompatActivity {

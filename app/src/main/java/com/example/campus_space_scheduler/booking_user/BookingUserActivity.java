@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.booking_user;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.helper;
 
 import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;

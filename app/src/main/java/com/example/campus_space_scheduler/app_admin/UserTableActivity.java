@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.campus_space_scheduler.databinding.ActivityUserTableBinding;
 import com.example.campus_space_scheduler.databinding.DialogAddItemBinding;
+import com.example.campus_space_scheduler.model.ManagementModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.*;
 

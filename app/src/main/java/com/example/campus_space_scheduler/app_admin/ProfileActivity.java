@@ -1,7 +1,7 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.campus_space_scheduler.databinding.ActivityProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;

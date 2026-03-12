@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,12 +17,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
-import com.example.campus_space_scheduler.utils.FirebaseUtils;
+import com.example.campus_space_scheduler.DetailedViewScheduleActivity;
+import com.example.campus_space_scheduler.EditScheduleActivity;
+import com.example.campus_space_scheduler.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.example.campus_space_scheduler.enums.SlotStatus;
-import com.example.campus_space_scheduler.SlotColorMapper;
+import com.example.campus_space_scheduler.helper.SlotColorMapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

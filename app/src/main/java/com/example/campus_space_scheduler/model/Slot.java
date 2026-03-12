@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.model;
 
 import com.example.campus_space_scheduler.enums.SlotStatus;
 

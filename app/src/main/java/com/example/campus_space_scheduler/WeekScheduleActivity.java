@@ -10,6 +10,7 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.campus_space_scheduler.enums.SlotStatus;
+import com.example.campus_space_scheduler.helper.SlotColorMapper;
 import com.google.firebase.database.*;
 
 import java.text.SimpleDateFormat;

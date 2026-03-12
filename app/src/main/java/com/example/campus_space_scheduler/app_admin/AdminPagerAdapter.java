@@ -1,4 +1,4 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

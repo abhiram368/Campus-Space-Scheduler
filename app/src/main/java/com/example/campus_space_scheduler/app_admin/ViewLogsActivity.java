@@ -1,14 +1,16 @@
-package com.example.campus_space_scheduler;
+package com.example.campus_space_scheduler.app_admin;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.campus_space_scheduler.model.LogMock;
 import com.example.campus_space_scheduler.databinding.ActivityViewLogsBinding;
 import com.example.campus_space_scheduler.databinding.ItemLogBinding;
 import com.google.firebase.database.DataSnapshot;
