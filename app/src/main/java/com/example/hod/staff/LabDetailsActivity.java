@@ -58,12 +58,12 @@ public class LabDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Lab lab = dataSnapshot.getValue(Lab.class);
                 if (lab != null) {
-                    etLabName.setText(lab.name);
-                    etLabId.setText(lab.id);
-                    etCapacity.setText(lab.capacity);
-                    etSystems.setText(lab.systems);
-                    etLocation.setText(lab.location);
-                    etAdmin.setText(lab.admin);
+                    etLabName.setText(lab.getName());
+                    etLabId.setText(lab.getId());
+                    etCapacity.setText(lab.getCapacity());
+                    etSystems.setText(lab.getSystems());
+                    etLocation.setText(lab.getLocation());
+                    etAdmin.setText(lab.getAdmin());
                 }
             }
 

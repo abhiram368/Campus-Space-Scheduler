@@ -20,4 +20,52 @@ public class Lab {
         this.location = location;
         this.admin = admin;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(String capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getSystems() {
+        return systems;
+    }
+
+    public void setSystems(String systems) {
+        this.systems = systems;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
 }

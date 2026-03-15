@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
@@ -14,55 +13,81 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusSpaceScheduler">
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.hod.hod.RoleSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.campus_space_scheduler.LoginActivity"
+            android:exported="true" />
+
+        <activity
+            android:name="com.example.campus_space_scheduler.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".AdminActivity"
+            android:name="com.example.campus_space_scheduler.AdminActivity"
             android:exported="true"/>
-        <activity android:name=".AdminManagementActivity" />
-<!--        <activity android:name=".AdminScheduleManagementActivity" />-->
-        <activity android:name=".ViewLogsActivity" />
-        <activity android:name=".UserTableActivity" />
-        <activity android:name=".ScheduleEditorActivity"
+        <activity android:name="com.example.campus_space_scheduler.AdminManagementActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ViewLogsActivity" />
+        <activity android:name="com.example.campus_space_scheduler.UserTableActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ScheduleEditorActivity"
             android:exported="false"
             android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".ScheduleCalendarActivity"
+        <activity android:name="com.example.campus_space_scheduler.ScheduleCalendarActivity"
             android:exported="false"
             android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".HourlyGridActivity"
+        <activity android:name="com.example.campus_space_scheduler.HourlyGridActivity"
             android:exported="false"
             android:theme="@style/Theme.CampusSpaceScheduler"/>
-        <activity android:name=".SpaceSelectionActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".BookingUserActivity" />
-        <activity android:name=".OtherUserActivity" />
-        <activity android:name=".EditScheduleActivity" />
-        <activity android:name=".ViewScheduleActivity" />
-        <activity android:name=".DetailedViewScheduleActivity" />
-        <activity android:name=".BaseScheduleSelectorActivity"/>
-        <activity android:name=".WeekScheduleActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ApprovalHierarchyActivity" />
+        <activity android:name="com.example.campus_space_scheduler.SpaceSelectionActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ForgotPasswordActivity" />
+        <activity android:name="com.example.campus_space_scheduler.SignUpActivity" />
+        <activity android:name="com.example.campus_space_scheduler.BookingUserActivity" />
+        <activity android:name="com.example.campus_space_scheduler.OtherUserActivity" />
+        <activity android:name="com.example.campus_space_scheduler.EditScheduleActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ViewScheduleActivity" />
+        <activity android:name="com.example.campus_space_scheduler.DetailedViewScheduleActivity" />
+        <activity android:name="com.example.campus_space_scheduler.BaseScheduleSelectorActivity"/>
+        <activity android:name="com.example.campus_space_scheduler.WeekScheduleActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ProfileActivity" />
+        <activity android:name="com.example.campus_space_scheduler.ApprovalHierarchyActivity" />
 
+        <!-- HOD and Staff Activities -->
+        <activity android:name="com.example.hod.hod.HodDashboardActivity" />
+        <activity android:name="com.example.hod.hod.LabListActivity" />
+        <activity android:name="com.example.hod.hod.HallListActivity" />
+        <activity android:name="com.example.hod.hod.LiveStatusActivity" />
+        <activity android:name="com.example.hod.hod.LabScheduleActivity" />
+        <activity android:name="com.example.hod.hod.HallScheduleActivity" />
+        <activity android:name="com.example.hod.hod.ViewDocumentActivity" />
+        <activity android:name="com.example.hod.hod.HodRequestDetailActivity" />
+        <activity android:name="com.example.hod.hod.HodApprovalHistoryActivity" />
+        <activity android:name="com.example.hod.hod.HodViewScheduleHomeActivity" />
+        <activity android:name="com.example.hod.hod.HodEscalatedRequestsActivity" />
+        <activity android:name="com.example.hod.hod.CompletedRequestDetailActivity" />
+
+        <activity android:name="com.example.hod.staff.StaffDashboardActivity" />
+        <activity android:name="com.example.hod.staff.LabDetailsActivity" />
+        <activity android:name="com.example.hod.staff.PendingRequestsActivity" />
+        <activity android:name="com.example.hod.staff.LabLiveStatusActivity" />
+        <activity android:name="com.example.hod.staff.ViewScheduleActivity" />
+        <activity android:name="com.example.hod.staff.ApprovalHistoryActivity" />
+        <activity android:name="com.example.hod.staff.LabAdminsHomeActivity" />
+        <activity android:name="com.example.hod.staff.FacultyDashboardActivity" />
+        <activity android:name="com.example.hod.staff.RequestDetailActivity" />
+        <activity android:name="com.example.hod.staff.AdminDetailsActivity" />
+        <activity android:name="com.example.hod.staff.AdminScheduleActivity" />
+        <activity android:name="com.example.hod.staff.LabCompletedRequestDetailActivity" />
+        <activity android:name="com.example.hod.staff.StaffCompletedRequestDetailActivity" />
+        <activity android:name="com.example.hod.staff.LorViewerActivity" />
+        <activity android:name="com.example.hod.staff.ViewAdminsActivity" />
+        <activity android:name="com.example.hod.staff.WorkspaceStaffInchargeActivity" />
 
     </application>
 
