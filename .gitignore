@@ -7,4 +7,7 @@ app/google-services.json
 *.keystore
 
 # Local properties (contains SDK paths)
+local.properties.DS_Store
+.idea/
+.gradle/
 local.properties
