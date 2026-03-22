@@ -15,16 +15,23 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.campus_space_scheduler.DetailedViewScheduleActivity;
 import com.example.campus_space_scheduler.EditScheduleActivity;
 import com.example.campus_space_scheduler.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.color.MaterialColors;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.example.campus_space_scheduler.enums.SlotStatus;
-import com.example.campus_space_scheduler.helper.SlotColorMapper;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +57,7 @@ public class ScheduleFragment extends Fragment {
 
     private ActivityResultLauncher<String> jsonPicker;
     private DatabaseReference db;
+    private final List<ValueEventListener> slotListeners = new ArrayList<>();
 
     private String currentSpaceId;
 
@@ -61,19 +69,15 @@ public class ScheduleFragment extends Fragment {
 
         db = FirebaseDatabase.getInstance().getReference();
 
-//        FirebaseUtils.setCurrentSpaceId("-Ol1cbQAGbNgCKlDPia8");
-
         uploadJsonBtn = view.findViewById(R.id.uploadJsonBtn);
         viewScheduleBtn = view.findViewById(R.id.viewScheduleBtn);
         editScheduleBtn = view.findViewById(R.id.editScheduleBtn);
 
-        // --- FRESH START LOCATION ---
-        // Implement your new display logic or dashboard widgets here.
         TextView header = view.findViewById(R.id.currentSpaceHeader);
+        header.setOnClickListener(v -> openSpacePicker());
         TableLayout table = view.findViewById(R.id.weekPreview);
 
         loadCurrentSpace(view, table, header);
-        // ----------------------------
 
         jsonPicker =
                 registerForActivityResult(
@@ -90,51 +94,100 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void setupButtons() {
-        uploadJsonBtn.setOnClickListener(v -> {
-            Log.d("SCHEDULE", "Upload clicked");
-            jsonPicker.launch("*/*");
-        });
+        uploadJsonBtn.setOnClickListener(v -> jsonPicker.launch("*/*"));
 
         viewScheduleBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DetailedViewScheduleActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(getActivity(), DetailedViewScheduleActivity.class));
         });
 
         editScheduleBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), EditScheduleActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(getActivity(), EditScheduleActivity.class));
         });
     }
 
     private void loadCurrentSpace(View view, TableLayout table, TextView header) {
 
         db.child("appConfig").child("currentSpaceId")
-                .addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
 
                     @Override
-                    public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
+                    public void onDataChange(DataSnapshot snapshot) {
 
                         if (!snapshot.exists()) {
                             header.setText("No Space Selected");
-                            // ---------------------------------------------------------
-                            // UI COLOR CONFIGURATION: Error text when no space is selected
-                            // ---------------------------------------------------------
-                            int noSpaceSelectedTextColor = Color.RED;
-                            header.setTextColor(noSpaceSelectedTextColor);
+                            header.setTextColor(Color.RED);
                             table.setVisibility(View.GONE);
                             return;
                         }
 
                         currentSpaceId = snapshot.getValue(String.class);
-
                         loadRoomNameAndDate(view, table, header);
                     }
 
                     @Override
-                    public void onCancelled(com.google.firebase.database.DatabaseError error) {
-                        Log.e("SCHEDULE", "Failed to load current space", error.toException());
+                    public void onCancelled(DatabaseError error) {
+                        Log.e("SCHEDULE", "Failed", error.toException());
                     }
                 });
+    }
+
+    private void openSpacePicker() {
+
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+        View view = getLayoutInflater().inflate(R.layout.dialog_space_picker, null);
+
+        RecyclerView recycler = view.findViewById(R.id.spaceList);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<String> names = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
+
+        db.child("spaces").get().addOnSuccessListener(snapshot -> {
+
+            for (DataSnapshot space : snapshot.getChildren()) {
+                String id = space.getKey();
+                String name = space.child("roomName").getValue(String.class);
+
+                if (id != null && name != null) {
+                    ids.add(id);
+                    names.add(name.trim());
+                }
+            }
+
+            recycler.setAdapter(new RecyclerView.Adapter<>() {
+                @Override
+                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    TextView tv = new TextView(parent.getContext());
+                    tv.setPadding(32, 32, 32, 32);
+                    tv.setTextSize(16);
+                    return new RecyclerView.ViewHolder(tv) {};
+                }
+
+                @Override
+                public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                    TextView tv = (TextView) holder.itemView;
+                    tv.setText(names.get(position));
+
+                    tv.setOnClickListener(v -> {
+                        String selectedId = ids.get(position);
+
+                        db.child("appConfig").child("currentSpaceId")
+                                .setValue(selectedId);
+
+                        dialog.dismiss();
+                    });
+                }
+
+                @Override
+                public int getItemCount() {
+                    return names.size();
+                }
+            });
+
+        });
+
+        dialog.setContentView(view);
+        dialog.show();
     }
 
     private void loadRoomNameAndDate(View view, TableLayout table, TextView header) {
@@ -145,20 +198,20 @@ public class ScheduleFragment extends Fragment {
                     if (!isAdded()) return;
 
                     String roomName = snapshot.getValue(String.class);
-
                     if (roomName == null) roomName = "Unknown Room";
 
-                    SimpleDateFormat dateFormat =
-                            new SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault());
-
-                    String today = dateFormat.format(Calendar.getInstance().getTime());
+                    String today = new SimpleDateFormat(
+                            "EEEE, dd MMM yyyy", Locale.getDefault()
+                    ).format(Calendar.getInstance().getTime());
 
                     header.setText(roomName + " • " + today);
-                    // ---------------------------------------------------------
-                    // UI COLOR CONFIGURATION: Active room name/date text color
-                    // ---------------------------------------------------------
-                    int activeHeaderTextColor = Color.WHITE;
-                    header.setTextColor(activeHeaderTextColor);
+
+                    int color = MaterialColors.getColor(
+                            requireContext(),
+                            com.google.android.material.R.attr.colorOnSurface,
+                            Color.BLACK
+                    );
+                    header.setTextColor(color);
 
                     table.setVisibility(View.VISIBLE);
 
@@ -183,6 +236,7 @@ public class ScheduleFragment extends Fragment {
             }
 
             reader.close();
+            assert inputStream != null;
             inputStream.close();
 
             String json = builder.toString();
@@ -256,29 +310,79 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void loadWeekFromFirebase(String spaceId, TableLayout table) {
+
+        clearListeners();
+
         List<String> weekDates = getCurrentWeekDates();
 
         for (int j = 0; j < weekDates.size(); j++) {
+
             String date = weekDates.get(j);
             int dayIndex = j;
             String scheduleId = spaceId + "_" + date;
 
-            // Path: schedules -> {spaceId}_{date} -> slots
-            db.child("schedules").child(scheduleId).child("slots").get()
-                    .addOnSuccessListener(snapshot -> {
-                        if (snapshot.exists()) {
-                            for (com.google.firebase.database.DataSnapshot slotSnapshot : snapshot.getChildren()) {
-                                String start = slotSnapshot.child("start").getValue(String.class);
-                                String status = slotSnapshot.child("status").getValue(String.class);
+            DatabaseReference ref = db.child("schedules")
+                    .child(scheduleId)
+                    .child("slots");
 
-                                if (start != null && status != null) {
-                                    int slotIndex = calculateSlotIndex(start);
-                                    updateSlotColor(table, dayIndex, slotIndex, status);
-                                }
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+
+                    if (!isAdded()) return;
+
+                    if (snapshot.exists()) {
+                        for (DataSnapshot slotSnapshot : snapshot.getChildren()) {
+
+                            String start = slotSnapshot.child("start").getValue(String.class);
+                            String status = slotSnapshot.child("status").getValue(String.class);
+
+                            if (start != null && status != null) {
+                                int slotIndex = calculateSlotIndex(start);
+                                updateSlotColor(table, dayIndex, slotIndex, status);
                             }
                         }
-                    });
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.e("SCHEDULE", "Realtime failed", error.toException());
+                }
+            };
+
+            ref.addValueEventListener(listener);
+            slotListeners.add(listener);
         }
+    }
+
+    private void clearListeners() {
+
+        if (currentSpaceId == null) return;
+
+        List<String> weekDates = getCurrentWeekDates();
+
+        for (int j = 0; j < weekDates.size(); j++) {
+
+            String date = weekDates.get(j);
+            String scheduleId = currentSpaceId + "_" + date;
+
+            DatabaseReference ref = db.child("schedules")
+                    .child(scheduleId)
+                    .child("slots");
+
+            if (j < slotListeners.size()) {
+                ref.removeEventListener(slotListeners.get(j));
+            }
+        }
+
+        slotListeners.clear();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearListeners();
     }
 
     private int calculateSlotIndex(String startTime) {
@@ -326,9 +430,9 @@ public class ScheduleFragment extends Fragment {
                 // ---------------------------------------------------------
                 // UI COLOR CONFIGURATION: Default empty slot background
                 // ---------------------------------------------------------
-                int defaultGridSlotColor = Color.WHITE;
-                cell.setBackgroundColor(defaultGridSlotColor);
+                cell.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_cell));
                 cell.setTag(j + "_" + i);
+                cell.setElevation(6f);
                 row.addView(cell);
             }
             table.addView(row);
@@ -339,8 +443,10 @@ public class ScheduleFragment extends Fragment {
         TextView tv = new TextView(getContext());
         tv.setText(text);
         tv.setGravity(android.view.Gravity.CENTER);
-        tv.setPadding(4, 8, 4, 8);
-        tv.setTextSize(10f);
+        tv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_header));
+        tv.setPadding(12, 16, 12, 16);
+        tv.setTextSize(12f);
+        tv.setElevation(4f);
         // ---------------------------------------------------------
         // UI COLOR CONFIGURATION: Background and text for headers (Days/Times)
         // ---------------------------------------------------------
@@ -352,7 +458,7 @@ public class ScheduleFragment extends Fragment {
         if (isHeader) tv.setTypeface(null, android.graphics.Typeface.BOLD);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-        params.setMargins(1, 1, 1, 1);
+        params.setMargins(3, 3, 3, 3);
         tv.setLayoutParams(params);
         return tv;
     }
@@ -378,7 +484,17 @@ public class ScheduleFragment extends Fragment {
                 // Converts String (e.g., "AVAILABLE") to SlotStatus Enum
                 SlotStatus status = SlotStatus.valueOf(statusString.toUpperCase());
                 // Gets color from your Mapper
-                dot.setBackgroundColor(SlotColorMapper.getColor(status));
+                if (status == SlotStatus.AVAILABLE) {
+                    dot.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.slot_available));
+                } else if (status == SlotStatus.BOOKED) {
+                    dot.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.slot_booked));
+                } else if (status == SlotStatus.PENDING) {
+                    dot.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.slot_pending));
+                } else if (status == SlotStatus.BLOCKED) {
+                    dot.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.slot_blocked));
+                } else if (status == SlotStatus.MAINTENANCE) {
+                    dot.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.slot_maintenance));
+                }
             } catch (IllegalArgumentException e) {
                 // ---------------------------------------------------------
                 // UI COLOR CONFIGURATION: Color used when the slot status is unknown

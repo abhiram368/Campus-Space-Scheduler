@@ -4,33 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     android:background="?attr/colorSurface">
 
-    <LinearLayout
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/uploadJsonBtn"
+        style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="16dp">
+        android:layout_height="wrap_content"
+        android:text="Upload Schedule JSON"
+        android:textColor="?attr/colorPrimary"
+        app:backgroundTint="?attr/colorPrimaryContainer" />
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_back"
-            app:tint="?attr/colorOnSurface" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weekly Schedule"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginStart="12dp"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/currentSpaceHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="No Space Selected"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -56,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Available"
-                android:textSize="11sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <!-- Booked -->
@@ -77,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booked"
-                android:textSize="11sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <!-- Pending -->
@@ -98,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pending"
-                android:textSize="11sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <!-- Blocked -->
@@ -119,39 +114,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Blocked"
-                android:textSize="11sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="12dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="16dp"
-        app:strokeColor="?attr/colorOutline"
-        app:strokeWidth="1dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true">
 
-        <ScrollView
+        <TableLayout
+            android:id="@+id/weekPreview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="?attr/colorOutline"
+            android:stretchColumns="*" />
+    </ScrollView>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewScheduleBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Schedule"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary" />
 
-                <TableLayout
-                    android:id="@+id/weekPreview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="*"
-                    android:padding="8dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editScheduleBtn"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Schedule"
+        android:textColor="?attr/colorPrimary"
+        app:backgroundTint="?attr/colorPrimaryContainer" />
 
-            </HorizontalScrollView>
-
-        </ScrollView>
-
-    </com.google.android.material.card.MaterialCardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
 
 </LinearLayout>

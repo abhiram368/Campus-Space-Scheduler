@@ -324,7 +324,7 @@ public class WeekScheduleActivity extends AppCompatActivity {
                 for(String key:editors.keySet()){
 
                     updates.put(key,
-                            editors.get(key).getText().toString());
+                            Objects.requireNonNull(editors.get(key)).getText().toString());
                 }
 
                 saveSlot(day,slot,updates);

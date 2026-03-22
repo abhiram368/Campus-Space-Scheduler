@@ -74,7 +74,7 @@ public abstract class BaseScheduleSelectorActivity extends AppCompatActivity {
 
             Intent intent = new Intent(
                     BaseScheduleSelectorActivity.this,
-                    WeekScheduleActivity.class
+                    DayScheduleActivity.class
             );
 
             intent.putExtra("spaceId", selectedSpaceId);

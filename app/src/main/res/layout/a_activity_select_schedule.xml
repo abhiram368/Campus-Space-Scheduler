@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Room Booking"
+                android:text="Schedule View"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Choose a workspace and pick a date to check availability."
+            android:text="Choose a workspace and pick a date to view the schedule."
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
             android:layout_marginTop="4dp"
