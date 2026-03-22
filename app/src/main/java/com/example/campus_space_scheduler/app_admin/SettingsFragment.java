@@ -47,9 +47,9 @@ public class SettingsFragment extends Fragment {
         binding.btnLogout.getRoot().setOnClickListener(v -> handleLogout());
 
         // Integrations
-        configureRow(binding.btnApprovalHierarchy.getRoot(), "Manage Approval Hierarchy", R.drawable.ic_hierarchy, false);
-        binding.btnApprovalHierarchy.getRoot().setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), ApprovalHierarchyActivity.class)));
+        configureRow(binding.btnManageBookings.getRoot(), "Manage Bookings", R.drawable.ic_hierarchy, false);
+        binding.btnManageBookings.getRoot().setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), ManageBookingsActivity.class)));
 
         // Row with Status Badge
         AItemSettingsRowBinding syncRow = AItemSettingsRowBinding.bind(binding.btnGoogleSync.getRoot());

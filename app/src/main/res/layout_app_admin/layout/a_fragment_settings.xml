@@ -43,7 +43,7 @@
             android:textColor="?attr/colorPrimary" />
 
         <include
-            android:id="@+id/btnApprovalHierarchy"
+            android:id="@+id/btnManageBookings"
             layout="@layout/a_item_settings_row" />
         <include
             android:id="@+id/btnGoogleSync"
