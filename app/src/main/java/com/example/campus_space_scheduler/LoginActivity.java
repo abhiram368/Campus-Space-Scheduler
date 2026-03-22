@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     private AActivityLoginBinding binding;
@@ -40,8 +42,14 @@ public class LoginActivity extends AppCompatActivity {
 
         googleClient = GoogleSignIn.getClient(this, options);
 
-        binding.btnLogin.setOnClickListener(v -> emailLogin());
-        binding.btnGoogle.setOnClickListener(v -> googleLogin());
+        binding.btnLogin.setOnClickListener(v -> {
+            v.setEnabled(false);
+            emailLogin();
+        });
+        binding.btnGoogle.setOnClickListener(v -> {
+            v.setEnabled(false);
+            googleLogin();
+        });
         binding.tvForgotPass.setOnClickListener(v ->
                 startActivity(new Intent(this, ForgotPasswordActivity.class)));
 
@@ -60,12 +68,24 @@ public class LoginActivity extends AppCompatActivity {
 
         if(email.isEmpty() || password.isEmpty()){
             toast("Fields required");
+            binding.btnLogin.setEnabled(true);
             return;
         }
 
         auth.signInWithEmailAndPassword(email,password)
-                .addOnSuccessListener(result -> verifyUser(result.getUser()))
-                .addOnFailureListener(e -> toast("Login failed"));
+                .addOnSuccessListener(result -> {
+                    FirebaseUser user = result.getUser();
+                    if (user != null) {
+                        verifyUser(user);
+                    } else {
+                        binding.btnLogin.setEnabled(true);
+                        toast("Login failed (no user)");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    binding.btnLogin.setEnabled(true);
+                    toast("Login failed");
+                });
     }
 
     // ------------------------------------------------
@@ -73,7 +93,10 @@ public class LoginActivity extends AppCompatActivity {
     // ------------------------------------------------
 
     private void googleLogin(){
-        startActivityForResult(googleClient.getSignInIntent(),RC_GOOGLE);
+        googleClient.signOut().addOnCompleteListener(task -> {
+            Intent signInIntent = googleClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_GOOGLE);
+        });
     }
 
     @Override
@@ -82,6 +105,12 @@ public class LoginActivity extends AppCompatActivity {
 
         if(requestCode==RC_GOOGLE){
 
+            if (data == null) {
+                binding.btnGoogle.setEnabled(true);
+                toast("Google login cancelled");
+                return;
+            }
+
             Task<GoogleSignInAccount> task =
                     GoogleSignIn.getSignedInAccountFromIntent(data);
 
@@ -89,14 +118,32 @@ public class LoginActivity extends AppCompatActivity {
 
                 GoogleSignInAccount account = task.getResult(ApiException.class);
 
+                if (account == null || account.getIdToken() == null) {
+                    binding.btnGoogle.setEnabled(true);
+                    toast("Google token error");
+                    return;
+                }
+
                 AuthCredential credential =
                         GoogleAuthProvider.getCredential(account.getIdToken(),null);
 
                 auth.signInWithCredential(credential)
-                        .addOnSuccessListener(result -> verifyUser(result.getUser()))
-                        .addOnFailureListener(e -> toast("Google auth failed"));
+                        .addOnSuccessListener(result -> {
+                            FirebaseUser user = result.getUser();
+                            if (user != null) {
+                                verifyUser(user);
+                            } else {
+                                binding.btnGoogle.setEnabled(true);
+                                toast("Google auth failed");
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            binding.btnGoogle.setEnabled(true);
+                            toast("Google auth failed");
+                        });
 
-            }catch (Exception e){
+            } catch (Exception e){
+                binding.btnGoogle.setEnabled(true);
                 toast("Google login failed");
             }
         }
@@ -114,6 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(snapshot -> {
 
+                    if (isFinishing() || isDestroyed()) return;
+
                     if(snapshot.exists()){
                         LogHelper.log("LOGIN", user.getEmail() + " logged in");
                         startActivity(new Intent(this, MainActivity.class));
@@ -121,14 +170,21 @@ public class LoginActivity extends AppCompatActivity {
 
                     }else{
 
-                        user.delete();
-                        auth.signOut();
-                        toast("User not authorized");
-
+                        // safer delete
+                        user.delete().addOnCompleteListener(t -> {
+                            auth.signOut();
+                            binding.btnLogin.setEnabled(true);
+                            binding.btnGoogle.setEnabled(true);
+                            toast("User not authorized");
+                        });
                     }
 
                 })
-                .addOnFailureListener(e -> toast("Database error"));
+                .addOnFailureListener(e -> {
+                    binding.btnLogin.setEnabled(true);
+                    binding.btnGoogle.setEnabled(true);
+                    toast("Database error");
+                });
     }
 
     private void toast(String msg){
