@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.campus_space_scheduler.databinding.AActivityUserTableBinding;
 import com.example.campus_space_scheduler.databinding.ADialogAddItemBinding;
+import com.example.campus_space_scheduler.enums.UserRole;
 import com.example.campus_space_scheduler.model.ManagementModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class UserTableActivity extends AppCompatActivity {
 
@@ -104,9 +107,23 @@ public class UserTableActivity extends AppCompatActivity {
 
                     if (item == null) continue;
 
-                    if ("All".equals(filterRole) ||
-                            (item.getRole() != null && item.getRole().equalsIgnoreCase(filterRole))) {
+                    if ("All".equals(filterRole)) {
                         fullList.add(new DataNode(ds.getKey(), item));
+                    } else if ("USER".equals(mode)) {
+
+                        UserRole role = UserRole.fromDisplayName(item.getRole());
+                        UserRole filter = UserRole.fromDisplayName(filterRole);
+
+                        if (item.getRole() != null && role == filter) {
+                            fullList.add(new DataNode(ds.getKey(), item));
+                        }
+
+                    } else { // SPACE MODE
+
+                        if (item.getRole() != null &&
+                                item.getRole().equalsIgnoreCase(filterRole)) {
+                            fullList.add(new DataNode(ds.getKey(), item));
+                        }
                     }
                 }
 
@@ -188,17 +205,9 @@ public class UserTableActivity extends AppCompatActivity {
             dBinding.editField3.setText(item.getPhoneNumber());
             dBinding.editField4.setText(item.getRollNo());
 
-            String[] roles = {
-                    "Student",
-                    "Faculty",
-                    "Hall Incharge",
-                    "Staff Incharge",
-                    "CSED Staff",
-                    "HoD",
-                    "Faculty Incharge",
-                    "Lab admin",
-                    "App admin"
-            };
+            String[] roles = Arrays.stream(UserRole.values())
+                    .map(UserRole::getDisplayName)
+                    .toArray(String[]::new);
 
             dBinding.roleDropdown.setAdapter(
                     new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, roles)
@@ -233,16 +242,19 @@ public class UserTableActivity extends AppCompatActivity {
 
                     if ("USER".equals(mode)) {
 
-                        map.put("name", dBinding.editField1.getText().toString());
-                        map.put("emailId", dBinding.editField2.getText().toString());
-                        map.put("phoneNumber", dBinding.editField3.getText().toString());
-                        map.put("rollNo", dBinding.editField4.getText().toString());
-                        map.put("role", dBinding.roleDropdown.getText().toString());
+                        map.put("name", Objects.requireNonNull(dBinding.editField1.getText()).toString());
+                        map.put("emailId", Objects.requireNonNull(dBinding.editField2.getText()).toString());
+                        map.put("phoneNumber", Objects.requireNonNull(dBinding.editField3.getText()).toString());
+                        map.put("rollNo", Objects.requireNonNull(dBinding.editField4.getText()).toString());
+                        UserRole role = UserRole.fromDisplayName(
+                                dBinding.roleDropdown.getText().toString()
+                        );
+                        map.put("role", role != null ? role.getDisplayName() : "");
 
                     } else {
 
-                        map.put("roomName", dBinding.editField1.getText().toString());
-                        map.put("capacity", dBinding.editField2.getText().toString());
+                        map.put("roomName", Objects.requireNonNull(dBinding.editField1.getText()).toString());
+                        map.put("capacity", Objects.requireNonNull(dBinding.editField2.getText()).toString());
                         map.put("role", dBinding.roleDropdown.getText().toString());
                     }
 
