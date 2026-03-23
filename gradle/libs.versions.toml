@@ -1,5 +1,5 @@
 [versions]
-agp = "9.0.1"
+agp = "8.3.2"
 firebaseBom = "34.9.0"
 junit = "4.13.2"
 #junitVersion = "1.1.5"
@@ -21,6 +21,7 @@ google-services = "4.4.4"
 firebaseAuth = "24.0.1"
 playServicesAuth = "21.5.0"
 playServicesAuthVersion = "21.0.0"
+firebaseFirestore = "26.1.2"
 
 [libraries]
 #firebase-bom-v3490 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -37,6 +38,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database" 
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-auth-v2100 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
