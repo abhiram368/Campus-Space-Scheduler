@@ -146,9 +146,21 @@ public class HodDashboardActivity extends AppCompatActivity {
         findViewById(R.id.btnProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, HodProfileActivity.class)));
 
-        findViewById(R.id.btnBook).setOnClickListener(v ->
-                Toast.makeText(this, "Resource booking flow disabled for HOD", Toast.LENGTH_SHORT).show());
-    }
+        findViewById(R.id.btnBook).setOnClickListener(v -> {
+        try {
+            Intent intent = new Intent();
+            // Use full class name for cross-module navigation
+            intent.setClassName(this, 
+                "com.example.campus_space_scheduler.booking_user.BookingUserActivity");
+            intent.putExtra("ROLE", "HOD");
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Unable to open booking screen", 
+                Toast.LENGTH_SHORT).show();
+        }
+    });
+} 
+    
 
     private void fetchLiveInsights() {
         FirebaseDatabase.getInstance().getReference("bookings")
