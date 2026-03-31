@@ -219,11 +219,21 @@ public class StaffDashboardActivity extends AppCompatActivity {
 
 
         // Feature disabled as per request
-        if (btnBook != null) {
-            btnBook.setOnClickListener(v -> {
-                Toast.makeText(StaffDashboardActivity.this, "Booking disabled for Staff Incharge", Toast.LENGTH_SHORT).show();
-            });
+         if (btnBook != null) {
+    btnBook.setOnClickListener(v -> {
+        try {
+            Intent intent = new Intent();
+            // Using full class name for cross-module navigation
+            intent.setClassName(StaffDashboardActivity.this, 
+                "com.example.campus_space_scheduler.booking_user.BookingUserActivity");
+            intent.putExtra("ROLE", "Staff");
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(StaffDashboardActivity.this, 
+                "Unable to open booking screen", Toast.LENGTH_SHORT).show();
         }
+    });
+}
 
         if (!labIdToPass.isEmpty()) {
             loadInsights(labIdToPass);
