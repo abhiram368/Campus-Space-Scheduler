@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.campus_space_scheduler">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -53,10 +49,33 @@
         <activity android:name=".booking_user.BookingDetailsActivity" />
         <activity android:name=".booking_user.CancelRequestActivity" />
         <activity android:name=".booking_user.BookingHistoryActivity" />
-        <activity android:name=".booking_user.AvailableTimeSlotsActivity"
-            android:exported="true" />
+        <activity android:name=".booking_user.AvailableTimeSlotsActivity" />
         <activity android:name=".booking_user.ProfileActivity" />
         <activity android:name=".booking_user.BookingFormActivity" />
+
+        <!-- Somu-->
+        <activity android:name=".lab_admin_incharge.LabAdminDashboardActivity" />
+        <activity android:name=".lab_admin_incharge.LabAdminBookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.PendingRequestsActivity" />
+        <activity android:name=".lab_admin_incharge.LiveStatusActivity" />
+        <activity android:name=".lab_admin_incharge.BookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.ApprovalHistoryActivity" />
+        <activity android:name=".lab_admin_incharge.CapturePhotoActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyApprovalHistoryActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyBookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyPendingRequestsActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyLiveStatusActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyDashboardActivity" />
+        <activity android:name=".lab_admin_incharge.FacultySelectionActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyViewScheduleActivity" />
+        <activity android:name=".lab_admin_incharge.HallInchargeActivity" />
+        <activity android:name=".lab_admin_incharge.LabAdminSelectionActivity" />
+        <activity android:name=".lab_admin_incharge.LabDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.LoginActivity" />
+        <activity android:name=".lab_admin_incharge.MainActivity" />
+        <activity android:name=".lab_admin_incharge.ReportIssueActivity" />
+        <activity android:name=".lab_admin_incharge.ViewScheduleActivity" />
+        <activity android:name=".lab_admin_incharge.ProfileActivity" />
 
     </application>
 
