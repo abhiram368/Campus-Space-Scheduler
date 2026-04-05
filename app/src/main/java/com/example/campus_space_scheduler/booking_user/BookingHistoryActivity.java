@@ -280,6 +280,7 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         intent.putExtra("APPROVED_BY", booking.getApprovedBy());
         intent.putExtra("SCHEDULE_ID", booking.getScheduleId());
         intent.putExtra("SLOT_START", booking.getSlotStart());
+        intent.putExtra("SPACE_TYPE", booking.getSpaceType()); // Pass space type
 
         String reqDate = "";
         String reqTime = "";

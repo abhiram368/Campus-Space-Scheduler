@@ -21,6 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +41,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             approvedByTextView, textViewRemarks;
     private MaterialButton buttonViewLor, buttonCancelBooking, buttonAddToCalendar;
     
-    private String bookingId, scheduleId, timeSlot, slotStart, spaceName, date, purpose, description;
+    private String bookingId, scheduleId, timeSlot, slotStart, spaceName, date, purpose, description, spaceType;
     private DatabaseReference bookingRef;
     private ValueEventListener bookingListener;
 
@@ -75,16 +76,17 @@ public class BookingDetailsActivity extends AppCompatActivity {
         purpose = getIntent().getStringExtra("PURPOSE");
         description = getIntent().getStringExtra("DESCRIPTION");
         String status = getIntent().getStringExtra("STATUS");
-        String remark = getIntent().getStringExtra("REMARKS"); // Changed from remarks to remark
+        String remark = getIntent().getStringExtra("REMARKS");
         String actionBy = getIntent().getStringExtra("ACTION_BY");
         String requestedOn = getIntent().getStringExtra("REQUESTED_ON");
         boolean hasLor = getIntent().getBooleanExtra("HAS_LOR", false);
         String lorUrl = getIntent().getStringExtra("LOR_UPLOAD");
         boolean showCancelButton = getIntent().getBooleanExtra("SHOW_CANCEL_BUTTON", false);
         String approvedByUid = getIntent().getStringExtra("APPROVED_BY");
+        spaceType = getIntent().getStringExtra("SPACE_TYPE");
 
         // Set initial data to views
-        updateUI(spaceName, status, date, timeSlot, purpose, description, requestedOn, bookedById, approvedByUid, actionBy, remark, hasLor, lorUrl, showCancelButton);
+        updateUI(spaceName, status, date, timeSlot, purpose, description, requestedOn, bookedById, approvedByUid, actionBy, remark, hasLor, lorUrl, showCancelButton, spaceType);
 
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(v -> finish());
@@ -106,7 +108,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 Booking booking = snapshot.getValue(Booking.class);
                 if (booking != null) {
                     String status = booking.getStatus();
-                    String remark = booking.getRemark(); // Changed from remarks to remark
+                    String remark = booking.getRemark();
                     String actionBy = booking.getActionBy();
                     String approvedByUid = booking.getApprovedBy();
                     String lorUrl = booking.getLorUpload();
@@ -118,11 +120,12 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     timeSlot = booking.getTimeSlot();
                     purpose = booking.getPurpose();
                     description = booking.getDescription();
+                    spaceType = booking.getSpaceType();
 
                     updateUI(spaceName, status, date, timeSlot, purpose, description, 
                             null, // requestedOn handled by intent initially
                             booking.getBookedBy(), approvedByUid, actionBy, remark, hasLor, lorUrl, 
-                            getIntent().getBooleanExtra("SHOW_CANCEL_BUTTON", false));
+                            getIntent().getBooleanExtra("SHOW_CANCEL_BUTTON", false), spaceType);
                 }
             }
 
@@ -137,7 +140,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
     private void updateUI(String spaceName, String status, String date, String timeSlot, 
                           String purpose, String description, String requestedOn, 
                           String bookedById, String approvedByUid, String actionBy, 
-                          String remark, boolean hasLor, String lorUrl, boolean showCancelButton) {
+                          String remark, boolean hasLor, String lorUrl, boolean showCancelButton,
+                          String spaceType) {
         
         if (spaceNameTextView != null) spaceNameTextView.setText(spaceName != null ? spaceName : "N/A");
         if (statusTextView != null) {
@@ -156,10 +160,14 @@ public class BookingDetailsActivity extends AppCompatActivity {
             fetchUserName(bookedById, bookedByTextView, null);
         }
 
+        // Determine if it's a Classroom (direct booking)
+        boolean isClassroom = (spaceType != null && spaceType.equalsIgnoreCase("Classroom")) || 
+                             (remark != null && remark.contains("Directly booked"));
+
         // Handle Status logic
         if (status != null) {
             boolean isApproved = status.equalsIgnoreCase("Approved") || status.equalsIgnoreCase("Accepted");
-            boolean isForwarded = status.equalsIgnoreCase("Forwarded");
+            boolean isForwarded = status.equalsIgnoreCase("Forwarded") || status.toLowerCase().contains("forwarded");
             boolean isRejected = status.equalsIgnoreCase("Rejected");
             boolean isCancelled = status.equalsIgnoreCase("Cancelled");
             boolean isExpired = status.toLowerCase().contains("expired");
@@ -172,29 +180,34 @@ public class BookingDetailsActivity extends AppCompatActivity {
             }
 
             if (approvedByTextView != null) {
-                String label;
-                if (isApproved) label = "Approved by: ";
-                else if (isForwarded) label = "Forwarded by: ";
-                else if (isRejected) label = "Rejected by: ";
-                else label = "Action by: ";
-
-                if (!status.equalsIgnoreCase("Pending") && !isCancelled && !isExpired) {
-                    if (approvedByUid != null && !approvedByUid.isEmpty()) {
-                        fetchUserName(approvedByUid, approvedByTextView, label);
-                    } else if (actionBy != null && !actionBy.isEmpty()) {
-                        approvedByTextView.setText(label + actionBy);
-                        approvedByTextView.setVisibility(View.VISIBLE);
-                    } else {
-                        approvedByTextView.setText(label + "Authority");
-                        approvedByTextView.setVisibility(View.VISIBLE);
-                    }
-                } else {
+                // If it's a Classroom and status is Approved, hide "Approved by"
+                if (isClassroom && isApproved) {
                     approvedByTextView.setVisibility(View.GONE);
+                } else {
+                    String label;
+                    if (isApproved) label = "Approved by: ";
+                    else if (isForwarded) label = "Forwarded by: ";
+                    else if (isRejected) label = "Rejected by: ";
+                    else label = "Action by: ";
+
+                    if (!status.equalsIgnoreCase("Pending") && !isCancelled && !isExpired) {
+                        if (approvedByUid != null && !approvedByUid.isEmpty()) {
+                            fetchUserName(approvedByUid, approvedByTextView, label);
+                        } else if (actionBy != null && !actionBy.isEmpty()) {
+                            approvedByTextView.setText(label + actionBy);
+                            approvedByTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            approvedByTextView.setText(label + "Authority");
+                            approvedByTextView.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        approvedByTextView.setVisibility(View.GONE);
+                    }
                 }
             }
         }
 
-        // Always show updated remarks if not null/empty - Moved outside status check for consistency
+        // Always show updated remarks if not null/empty
         if (textViewRemarks != null) {
             if (remark != null && !remark.trim().isEmpty() && !remark.equalsIgnoreCase("null")) {
                 textViewRemarks.setText("Remarks: " + remark);
@@ -221,8 +234,22 @@ public class BookingDetailsActivity extends AppCompatActivity {
         }
 
         if (buttonCancelBooking != null) {
-            // Allow cancel only if not already cancelled/rejected/expired
-            if (showCancelButton && status != null && !status.equalsIgnoreCase("Rejected") 
+            // Allow cancel only if showCancelButton is true AND (not a classroom OR it's coming from CancelRequestActivity)
+            // Wait, you said "add cancel request option... only for classroom". 
+            // Actually, based on your previous messages, you want Classrooms to be cancellable ONLY from the Cancel screen.
+            
+            boolean isFromCancelScreen = getIntent().getBooleanExtra("SHOW_CANCEL_BUTTON", false);
+            
+            boolean canCancel = false;
+            if (isFromCancelScreen) {
+                // If it's from the Cancel screen, we allow cancellation for EVERYTHING (including classrooms)
+                canCancel = true;
+            } else {
+                // If NOT from cancel screen (e.g. History), classrooms cannot be cancelled
+                canCancel = !isClassroom;
+            }
+
+            if (canCancel && status != null && !status.equalsIgnoreCase("Rejected")
                     && !status.equalsIgnoreCase("Cancelled") && !status.toLowerCase().contains("expired")) {
                 buttonCancelBooking.setVisibility(View.VISIBLE);
                 buttonCancelBooking.setOnClickListener(v -> showCancelConfirmationDialog());
@@ -273,24 +300,27 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     private void fetchCurrentUserNameAndCancel() {
-        String uid = FirebaseAuth.getInstance().getUid();
-        if (uid == null) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
             performCancellation("User");
             return;
         }
 
+        String uid = currentUser.getUid();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String name = "User";
+                String displayName = "User";
                 if (snapshot.exists()) {
-                    name = snapshot.child("name").getValue(String.class);
+                    String name = snapshot.child("name").getValue(String.class);
                     if (name == null) name = snapshot.child("displayName").getValue(String.class);
                     if (name == null) name = snapshot.child("full_name").getValue(String.class);
-                    if (name == null) name = "User";
+                    
+                    if (name != null) displayName = name;
+                    else displayName = currentUser.getDisplayName() != null ? currentUser.getDisplayName() : "User";
                 }
-                performCancellation(name);
+                performCancellation(displayName);
             }
 
             @Override
@@ -308,10 +338,10 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
         DatabaseReference slotsRef = FirebaseDatabase.getInstance().getReference("schedules").child(scheduleId).child("slots");
 
-        // Change: Update status to "Cancelled" instead of deleting, so it shows in history
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", "Cancelled");
         updates.put("remark", "Cancelled by " + userName);
+        updates.put("actionBy", userName);
 
         bookingRef.updateChildren(updates).addOnSuccessListener(aVoid -> {
             slotsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -345,6 +375,15 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     }
 
                     Toast.makeText(BookingDetailsActivity.this, R.string.booking_cancelled_successfully, Toast.LENGTH_SHORT).show();
+                    
+                    // Show notification for the user who cancelled
+                    NotificationHelper.showNotification(
+                        BookingDetailsActivity.this, 
+                        "Booking Cancelled", 
+                        "Your booking for " + spaceName + " has been successfully cancelled.",
+                        bookingId
+                    );
+
                     finish();
                 }
 
