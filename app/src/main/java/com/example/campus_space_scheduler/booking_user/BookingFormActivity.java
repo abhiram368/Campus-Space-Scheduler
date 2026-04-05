@@ -223,14 +223,15 @@ public class BookingFormActivity extends AppCompatActivity {
         data.put("date", date);
         data.put("timeSlot", timeSlot);
         data.put("spaceName", spaceName);
-        
+        data.put("remark", "");
+        data.put("actionBy", "");
         // Direct booking for Classrooms
         data.put("status", isClassroom ? "Approved" : "Pending");
         data.put("approvedBy", isClassroom ? "System (Auto)" : "");
         data.put("facultyInchargeApproval", isClassroom);
         data.put("hodApproval", isClassroom);
         if (isClassroom) {
-            data.put("remarks", "Directly booked (First Come First Serve)");
+            data.put("remark", "Directly booked (First Come First Serve)");
         }
 
         bookingsRef.child(bookingId).setValue(data).addOnCompleteListener(task -> {
@@ -238,12 +239,13 @@ public class BookingFormActivity extends AppCompatActivity {
                 String toastMsg = isClassroom ? "Booking Confirmed!" : "Booking Request Sent";
                 Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show();
                 
-                // Show notification
-                NotificationHelper.showNotification(
-                    this, 
-                    isClassroom ? "Booking Confirmed" : "Booking Submitted", 
-                    isClassroom ? "Your booking for " + spaceName + " is confirmed!" : "Booking request submitted successfully"
-                );
+                // Show notification with more details and bookingId
+                String title = isClassroom ? "Booking Confirmed" : "Booking Submitted";
+                String body = isClassroom ? 
+                    "Your booking for " + spaceName + " is confirmed!" : 
+                    "Your booking request for " + spaceName + " has been successfully submitted.";
+                
+                NotificationHelper.showNotification(this, title, body, bookingId);
 
                 // Close the form and return to Dashboard
                 Intent intent = new Intent(this, BookingUserActivity.class);

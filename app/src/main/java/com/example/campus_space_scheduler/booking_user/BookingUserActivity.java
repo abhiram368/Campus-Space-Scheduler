@@ -238,7 +238,7 @@ public class BookingUserActivity extends AppCompatActivity {
                             }
 
                             if (!message.isEmpty()) {
-                                NotificationHelper.showNotification(BookingUserActivity.this, "Booking Update", message);
+                                NotificationHelper.showNotification(BookingUserActivity.this, "Booking Update", message, bookingId);
                             }
 
                             // Save new status

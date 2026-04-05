@@ -36,18 +36,29 @@ public class NotificationHelper {
     }
 
     public static void showNotification(Context context, String title, String message) {
-        Log.d(TAG, "Showing notification: " + title + " - " + message);
+        showNotification(context, title, message, null);
+    }
+
+    public static void showNotification(Context context, String title, String message, String bookingId) {
+        Log.d(TAG, "Showing notification: " + title + " - " + message + (bookingId != null ? " for " + bookingId : ""));
         createNotificationChannel(context);
 
-        Intent intent = new Intent(context, BookingUserActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent;
+        if (bookingId != null) {
+            intent = new Intent(context, BookingDetailsActivity.class);
+            intent.putExtra("BOOKING_ID", bookingId);
+        } else {
+            intent = new Intent(context, BookingUserActivity.class);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         
         PendingIntent pendingIntent;
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        } else {
-            pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            flags |= PendingIntent.FLAG_IMMUTABLE;
         }
+        
+        pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, flags);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notifications)
