@@ -24,20 +24,7 @@
             app:title="Booking History"
             app:titleCentered="true"
             app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:titleTextColor="@color/white">
-
-            <ImageView
-                android:id="@+id/buttonClearHistory"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                android:padding="12dp"
-                android:src="@drawable/ic_delete"
-                android:contentDescription="Clear History"
-                app:tint="@color/white" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            app:titleTextColor="@color/white"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutFilter"

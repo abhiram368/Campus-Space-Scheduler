@@ -74,7 +74,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         purpose = getIntent().getStringExtra("PURPOSE");
         description = getIntent().getStringExtra("DESCRIPTION");
         String status = getIntent().getStringExtra("STATUS");
-        String remarks = getIntent().getStringExtra("REMARKS");
+        String remark = getIntent().getStringExtra("REMARKS"); // Changed from remarks to remark
         String actionBy = getIntent().getStringExtra("ACTION_BY");
         String requestedOn = getIntent().getStringExtra("REQUESTED_ON");
         boolean hasLor = getIntent().getBooleanExtra("HAS_LOR", false);
@@ -83,7 +83,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         String approvedByUid = getIntent().getStringExtra("APPROVED_BY");
 
         // Set initial data to views
-        updateUI(spaceName, status, date, timeSlot, purpose, description, requestedOn, bookedById, approvedByUid, actionBy, remarks, hasLor, lorUrl, showCancelButton);
+        updateUI(spaceName, status, date, timeSlot, purpose, description, requestedOn, bookedById, approvedByUid, actionBy, remark, hasLor, lorUrl, showCancelButton);
 
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(v -> finish());
@@ -105,7 +105,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 Booking booking = snapshot.getValue(Booking.class);
                 if (booking != null) {
                     String status = booking.getStatus();
-                    String remarks = booking.getRemarks();
+                    String remark = booking.getRemark(); // Changed from remarks to remark
                     String actionBy = booking.getActionBy();
                     String approvedByUid = booking.getApprovedBy();
                     String lorUrl = booking.getLorUpload();
@@ -120,7 +120,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
                     updateUI(spaceName, status, date, timeSlot, purpose, description, 
                             null, // requestedOn handled by intent initially
-                            booking.getBookedBy(), approvedByUid, actionBy, remarks, hasLor, lorUrl, 
+                            booking.getBookedBy(), approvedByUid, actionBy, remark, hasLor, lorUrl, 
                             getIntent().getBooleanExtra("SHOW_CANCEL_BUTTON", false));
                 }
             }
@@ -136,7 +136,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
     private void updateUI(String spaceName, String status, String date, String timeSlot, 
                           String purpose, String description, String requestedOn, 
                           String bookedById, String approvedByUid, String actionBy, 
-                          String remarks, boolean hasLor, String lorUrl, boolean showCancelButton) {
+                          String remark, boolean hasLor, String lorUrl, boolean showCancelButton) {
         
         if (spaceNameTextView != null) spaceNameTextView.setText(spaceName != null ? spaceName : "N/A");
         if (statusTextView != null) {
@@ -191,15 +191,15 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     approvedByTextView.setVisibility(View.GONE);
                 }
             }
+        }
 
-            // Always show updated remarks if not null/empty
-            if (textViewRemarks != null) {
-                if (remarks != null && !remarks.trim().isEmpty()) {
-                    textViewRemarks.setText("Remarks: " + remarks);
-                    textViewRemarks.setVisibility(View.VISIBLE);
-                } else {
-                    textViewRemarks.setVisibility(View.GONE);
-                }
+        // Always show updated remarks if not null/empty - Moved outside status check for consistency
+        if (textViewRemarks != null) {
+            if (remark != null && !remark.trim().isEmpty() && !remark.equalsIgnoreCase("null")) {
+                textViewRemarks.setText("Remarks: " + remark);
+                textViewRemarks.setVisibility(View.VISIBLE);
+            } else {
+                textViewRemarks.setVisibility(View.GONE);
             }
         }
 
@@ -282,7 +282,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         // Change: Update status to "Cancelled" instead of deleting, so it shows in history
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", "Cancelled");
-        updates.put("remarks", "Cancelled by user");
+        updates.put("remark", "Cancelled by user"); // Changed from remarks to remark
 
         bookingRef.updateChildren(updates).addOnSuccessListener(aVoid -> {
             slotsRef.addListenerForSingleValueEvent(new ValueEventListener() {

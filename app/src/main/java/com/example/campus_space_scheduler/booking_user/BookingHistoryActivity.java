@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.campus_space_scheduler.R;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -51,11 +49,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
             toolbar.setNavigationOnClickListener(v -> finish());
         }
 
-        ImageView buttonClearHistory = findViewById(R.id.buttonClearHistory);
-        if (buttonClearHistory != null) {
-            buttonClearHistory.setOnClickListener(v -> showClearHistoryConfirmation());
-        }
-
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory);
         progressBar = findViewById(R.id.progressBar);
         emptyTextView = findViewById(R.id.emptyTextView);
@@ -72,6 +65,37 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         
         setupTabLayout();
         fetchUserBookings();
+        
+        // Auto-delete rejected_expired bookings for this user
+        deleteExpiredBookings();
+    }
+
+    private void deleteExpiredBookings() {
+        String currentUserId = FirebaseAuth.getInstance().getUid();
+        if (currentUserId == null) return;
+
+        bookingsRef.orderByChild("bookedBy").equalTo(currentUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int count = 0;
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String status = ds.child("status").getValue(String.class);
+                            if ("rejected_expired".equalsIgnoreCase(status)) {
+                                ds.getRef().removeValue();
+                                count++;
+                            }
+                        }
+                        if (count > 0) {
+                            Log.d(TAG, "Deleted " + count + " rejected_expired bookings");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Error deleting expired bookings: " + error.getMessage());
+                    }
+                });
     }
 
     private void setupTabLayout() {
@@ -127,49 +151,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         }
         adapter.notifyDataSetChanged();
         updateEmptyState();
-    }
-
-    private void showClearHistoryConfirmation() {
-        if (fullList.isEmpty()) {
-            Toast.makeText(this, "History is already empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        new MaterialAlertDialogBuilder(this, R.style.Theme_CampusSpaceScheduler_Dialog_Custom)
-                .setTitle("Clear History")
-                .setMessage("Are you sure you want to clear your booking history? This will delete all your records.")
-                .setPositiveButton("Clear All", (dialog, which) -> clearUserHistory())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
-    private void clearUserHistory() {
-        String currentUserId = FirebaseAuth.getInstance().getUid();
-        if (currentUserId == null) return;
-
-        progressBar.setVisibility(View.VISIBLE);
-        
-        bookingsRef.orderByChild("bookedBy").equalTo(currentUserId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            ds.getRef().removeValue();
-                        }
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(BookingHistoryActivity.this, "History cleared successfully", Toast.LENGTH_SHORT).show();
-                        fullList.clear();
-                        historyList.clear();
-                        adapter.notifyDataSetChanged();
-                        updateEmptyState();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(BookingHistoryActivity.this, "Failed to clear history", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     private void fetchUserBookings() {
@@ -290,7 +271,7 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         intent.putExtra("DESCRIPTION", booking.getDescription());
         intent.putExtra("STATUS", booking.getStatus());
         intent.putExtra("LOR_UPLOAD", booking.getLorUpload());
-        intent.putExtra("REMARKS", booking.getRemarks());
+        intent.putExtra("REMARKS", booking.getRemark());
         intent.putExtra("ACTION_BY", booking.getActionBy());
         intent.putExtra("APPROVED_BY", booking.getApprovedBy());
         intent.putExtra("SCHEDULE_ID", booking.getScheduleId());

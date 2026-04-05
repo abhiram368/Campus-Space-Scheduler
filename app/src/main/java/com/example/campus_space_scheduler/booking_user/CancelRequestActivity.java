@@ -240,7 +240,7 @@ public class CancelRequestActivity extends AppCompatActivity implements BookingA
         intent.putExtra("DESCRIPTION", booking.getDescription());
         intent.putExtra("STATUS", booking.getStatus());
         intent.putExtra("LOR_UPLOAD", booking.getLorUpload());
-        intent.putExtra("REMARKS", booking.getRemarks());
+        intent.putExtra("REMARKS", booking.getRemark());
         intent.putExtra("ACTION_BY", booking.getActionBy());
         intent.putExtra("APPROVED_BY", booking.getApprovedBy());
         intent.putExtra("SCHEDULE_ID", booking.getScheduleId());
