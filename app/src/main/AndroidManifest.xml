@@ -58,6 +58,38 @@
         <activity android:name=".booking_user.ProfileActivity" />
         <activity android:name=".booking_user.BookingFormActivity" />
 
+        <!-- Somu-->
+        <activity android:name=".lab_admin_incharge.LabAdminDashboardActivity" />
+        <activity android:name=".lab_admin_incharge.LabAdminBookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.PendingRequestsActivity" />
+        <activity android:name=".lab_admin_incharge.LiveStatusActivity" />
+        <activity android:name=".lab_admin_incharge.BookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.ApprovalHistoryActivity" />
+        <activity android:name=".lab_admin_incharge.CapturePhotoActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyApprovalHistoryActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyBookingDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyPendingRequestsActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyLiveStatusActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyDashboardActivity" />
+        <activity android:name=".lab_admin_incharge.FacultySelectionActivity" />
+        <activity android:name=".lab_admin_incharge.FacultyViewScheduleActivity" />
+        <activity android:name=".lab_admin_incharge.HallInchargeActivity" />
+        <activity android:name=".lab_admin_incharge.LabAdminSelectionActivity" />
+        <activity android:name=".lab_admin_incharge.LabDetailsActivity" />
+        <activity android:name=".lab_admin_incharge.LoginActivity" />
+        <activity android:name=".lab_admin_incharge.MainActivity" />
+        <activity android:name=".lab_admin_incharge.ReportIssueActivity" />
+        <activity android:name=".lab_admin_incharge.ViewScheduleActivity" />
+        <activity android:name=".lab_admin_incharge.ProfileActivity" />
+        <activity android:name=".lab_admin_incharge.NotificationsActivity" />
+
+        <service
+            android:name=".lab_admin_incharge.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ firebaseAuth = "24.0.1"
 playServicesAuth = "21.5.0"
 playServicesAuthVersion = "21.0.0"
 firebaseFirestore = "26.1.2"
+firebaseMessaging = "25.0.1"
 
 [libraries]
 google-firebase-auth = { module = "com.google.firebase:firebase-auth" }
@@ -30,6 +31,7 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 play-services-auth-v2100 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
