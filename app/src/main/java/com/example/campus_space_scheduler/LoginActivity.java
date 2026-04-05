@@ -1,14 +1,22 @@
 package com.example.campus_space_scheduler;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.campus_space_scheduler.databinding.AActivityLoginBinding;
 import com.example.campus_space_scheduler.helper.LogHelper;
+import com.example.hod.utils.NotificationService;
 import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +31,26 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient googleClient;
 
-    private static final int RC_GOOGLE = 100;
+    private static final int PERM_NOTIF = 101;
+
+    private final ActivityResultLauncher<Intent> googleSignInLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        handleGoogleSignInResult(task);
+                    } else {
+                        binding.btnGoogle.setEnabled(true);
+                        toast("Google login cancelled");
+                    }
+                } else {
+                    binding.btnGoogle.setEnabled(true);
+                    toast("Google login failed or cancelled");
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         auth = FirebaseAuth.getInstance();
+
+        // Check for notification permission early
+        checkNotificationPermission();
 
         GoogleSignInOptions options =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -57,12 +87,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SignUpActivity.class)));
     }
 
-    // ------------------------------------------------
-    // EMAIL LOGIN
-    // ------------------------------------------------
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERM_NOTIF);
+            }
+        }
+    }
 
     private void emailLogin() {
-
         String email = binding.etUser.getText().toString().trim();
         String password = binding.etPass.getText().toString().trim();
 
@@ -84,93 +117,72 @@ public class LoginActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     binding.btnLogin.setEnabled(true);
-                    toast("Login failed");
+                    toast("Login failed: " + e.getMessage());
                 });
     }
-
-    // ------------------------------------------------
-    // GOOGLE LOGIN
-    // ------------------------------------------------
 
     private void googleLogin(){
         googleClient.signOut().addOnCompleteListener(task -> {
             Intent signInIntent = googleClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_GOOGLE);
+            googleSignInLauncher.launch(signInIntent);
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode,int resultCode,@Nullable Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-
-        if(requestCode==RC_GOOGLE){
-
-            if (data == null) {
+    private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if (account != null && account.getIdToken() != null) {
+                firebaseAuthWithGoogle(account.getIdToken());
+            } else {
                 binding.btnGoogle.setEnabled(true);
-                toast("Google login cancelled");
-                return;
+                toast("Google token error");
             }
-
-            Task<GoogleSignInAccount> task =
-                    GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try{
-
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-
-                if (account == null || account.getIdToken() == null) {
-                    binding.btnGoogle.setEnabled(true);
-                    toast("Google token error");
-                    return;
-                }
-
-                AuthCredential credential =
-                        GoogleAuthProvider.getCredential(account.getIdToken(),null);
-
-                auth.signInWithCredential(credential)
-                        .addOnSuccessListener(result -> {
-                            FirebaseUser user = result.getUser();
-                            if (user != null) {
-                                verifyUser(user);
-                            } else {
-                                binding.btnGoogle.setEnabled(true);
-                                toast("Google auth failed");
-                            }
-                        })
-                        .addOnFailureListener(e -> {
-                            binding.btnGoogle.setEnabled(true);
-                            toast("Google auth failed");
-                        });
-
-            } catch (Exception e){
-                binding.btnGoogle.setEnabled(true);
-                toast("Google login failed");
-            }
+        } catch (ApiException e) {
+            binding.btnGoogle.setEnabled(true);
+            toast("Google sign in failed: " + e.getStatusCode());
         }
     }
 
-    // ------------------------------------------------
-    // VERIFY USER EXISTS IN DATABASE
-    // ------------------------------------------------
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        auth.signInWithCredential(credential)
+                .addOnSuccessListener(result -> {
+                    FirebaseUser user = result.getUser();
+                    if (user != null) {
+                        verifyUser(user);
+                    } else {
+                        binding.btnGoogle.setEnabled(true);
+                        toast("Google auth failed");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    binding.btnGoogle.setEnabled(true);
+                    toast("Google auth failed: " + e.getMessage());
+                });
+    }
 
     private void verifyUser(FirebaseUser user){
-
         FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(user.getUid())
                 .get()
                 .addOnSuccessListener(snapshot -> {
-
                     if (isFinishing() || isDestroyed()) return;
 
                     if(snapshot.exists()){
                         LogHelper.log("LOGIN", user.getEmail() + " logged in");
+                        
+                        try {
+                            Intent serviceIntent = new Intent(this, NotificationService.class);
+                            startService(serviceIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
 
                     }else{
-
-                        // safer delete
                         user.delete().addOnCompleteListener(t -> {
                             auth.signOut();
                             binding.btnLogin.setEnabled(true);
@@ -178,12 +190,11 @@ public class LoginActivity extends AppCompatActivity {
                             toast("User not authorized");
                         });
                     }
-
                 })
                 .addOnFailureListener(e -> {
                     binding.btnLogin.setEnabled(true);
                     binding.btnGoogle.setEnabled(true);
-                    toast("Database error");
+                    toast("Database error: " + e.getMessage());
                 });
     }
 

@@ -15,10 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.campus_space_scheduler.R;
-<<<<<<< HEAD
+import com.example.models.Booking;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-=======
->>>>>>> venkat
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,79 +28,74 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingHistoryActivity extends AppCompatActivity implements BookingAdapter.OnItemClickListener {
+public class BookingHistoryActivity extends AppCompatActivity {
 
     private static final String TAG = "BookingHistoryActivity";
-    private RecyclerView recyclerViewHistory;
+    private RecyclerView recyclerView;
     private BookingAdapter adapter;
     private List<Booking> historyList;
     private ProgressBar progressBar;
-    private TextView emptyTextView;
-<<<<<<< HEAD
+    private TextView emptyTextView, textViewSpaceName;
     private DatabaseReference bookingsRef;
-=======
->>>>>>> venkat
+    private String spaceIdFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.t_activity_booking_history);
 
-        // Header and back button
-        ImageView buttonBack = findViewById(R.id.buttonBack);
-        if (buttonBack != null) {
-            buttonBack.setOnClickListener(v -> finish());
+        // Using MaterialToolbar if it exists in the layout (HEAD feature)
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(v -> finish());
+        } else {
+            // Fallback for venkat style layout
+            ImageView buttonBack = findViewById(R.id.buttonBack);
+            if (buttonBack != null) buttonBack.setOnClickListener(v -> finish());
         }
 
-<<<<<<< HEAD
+        recyclerView = findViewById(R.id.recyclerViewHistory);
+        progressBar = findViewById(R.id.progressBar);
+        emptyTextView = findViewById(R.id.emptyTextView);
+        textViewSpaceName = findViewById(R.id.textViewSpaceName);
+        
         ImageView buttonClearHistory = findViewById(R.id.buttonClearHistory);
         if (buttonClearHistory != null) {
+            buttonClearHistory.setVisibility(View.VISIBLE);
             buttonClearHistory.setOnClickListener(v -> showClearHistoryConfirmation());
         }
 
-=======
->>>>>>> venkat
-        recyclerViewHistory = findViewById(R.id.recyclerViewHistory);
-        progressBar = findViewById(R.id.progressBar);
-        emptyTextView = findViewById(R.id.emptyTextView);
-
         historyList = new ArrayList<>();
-        adapter = new BookingAdapter(historyList, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new BookingAdapter(historyList, this::onItemClick);
+        recyclerView.setAdapter(adapter);
 
-        recyclerViewHistory.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewHistory.setAdapter(adapter);
-
-<<<<<<< HEAD
         bookingsRef = FirebaseDatabase.getInstance().getReference("bookings");
+        
         fetchUserBookings();
     }
 
     private void showClearHistoryConfirmation() {
-        if (historyList.isEmpty()) {
-            Toast.makeText(this, "History is already empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        new MaterialAlertDialogBuilder(this, R.style.Theme_CampusSpaceScheduler_Dialog_Custom)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("Clear History")
-                .setMessage("Are you sure you want to clear your booking history? This will delete all your booking records.")
-                .setPositiveButton("Clear All", (dialog, which) -> clearUserHistory())
+                .setMessage("Are you sure you want to clear your entire booking history?")
+                .setPositiveButton("Clear All", (dialog, which) -> clearHistory())
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    private void clearUserHistory() {
+    private void clearHistory() {
         String currentUserId = FirebaseAuth.getInstance().getUid();
         if (currentUserId == null) return;
 
         progressBar.setVisibility(View.VISIBLE);
-        
         bookingsRef.orderByChild("bookedBy").equalTo(currentUserId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            ds.getRef().removeValue();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            dataSnapshot.getRef().removeValue();
                         }
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(BookingHistoryActivity.this, "History cleared successfully", Toast.LENGTH_SHORT).show();
@@ -118,11 +112,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
                 });
     }
 
-=======
-        fetchUserBookings();
-    }
-
->>>>>>> venkat
     private void fetchUserBookings() {
         String currentUserId = FirebaseAuth.getInstance().getUid();
         if (currentUserId == null) {
@@ -132,10 +121,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
 
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
 
-<<<<<<< HEAD
-=======
-        DatabaseReference bookingsRef = FirebaseDatabase.getInstance().getReference("bookings");
->>>>>>> venkat
         bookingsRef.orderByChild("bookedBy").equalTo(currentUserId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -153,10 +138,7 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
                                 }
 
                                 fetchScheduleDetails(booking);
-<<<<<<< HEAD
-=======
-                                fetchUserDetails(booking);
->>>>>>> venkat
+                                fetchUserDetails(booking); // venkat improvement
                                 historyList.add(booking);
                             }
                         }
@@ -183,8 +165,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         }
     }
 
-<<<<<<< HEAD
-=======
     private void fetchUserDetails(Booking booking) {
         if (booking.getBookedBy() == null) return;
 
@@ -194,6 +174,7 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String name = snapshot.child("name").getValue(String.class);
+                    // Handle name if needed in UI
                 }
             }
 
@@ -204,7 +185,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         });
     }
 
->>>>>>> venkat
     private void fetchScheduleDetails(Booking booking) {
         if (booking.getScheduleId() == null) return;
 
@@ -258,8 +238,7 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         });
     }
 
-    @Override
-    public void onItemClick(Booking booking) {
+    private void onItemClick(Booking booking) {
         Intent intent = new Intent(this, BookingDetailsActivity.class);
         intent.putExtra("BOOKING_ID", booking.getBookingId());
         intent.putExtra("SPACE_NAME", booking.getSpaceName());
@@ -273,7 +252,6 @@ public class BookingHistoryActivity extends AppCompatActivity implements Booking
         intent.putExtra("ACTION_BY", booking.getActionBy());
         intent.putExtra("APPROVED_BY", booking.getApprovedBy());
 
-        // Requested time (when the booking was made)
         String reqDate = "";
         String reqTime = "";
         if (booking.getBookedTime() != null) {
