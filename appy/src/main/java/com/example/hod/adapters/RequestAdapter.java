@@ -176,25 +176,38 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
                         if (status == null) status = "pending";
                         String lowerStatus = status.toLowerCase();
 
-                        // Determine if decision is already made. For Staff, Forwarded means they are done.
-                        boolean isProcessed = lowerStatus.equals("approved") || 
-                                            lowerStatus.contains("rejected") || 
-                                            lowerStatus.contains("cancelled") || 
-                                            lowerStatus.contains("expired") ||
-                                            lowerStatus.contains("forwarded") ||
-                                            lowerStatus.equals("booked") ||
-                                            lowerStatus.equals("used");
+                        // Use the existing booking object but update its status from the live check
+                        if (status != null) booking.setStatus(status);
 
-                        // Parse the latest booking data from the lightning check
-                        com.example.hod.models.Booking latestBooking = snapshot.getValue(com.example.hod.models.Booking.class);
-                        if (latestBooking != null && latestBooking.getBookingId() == null) {
-                            latestBooking.setBookingId(snapshot.getKey());
+                        // Determine context and whether latest status is processed based on role
+                        boolean isHodContext = lowerStatus.contains("forwarded_to_hod") || 
+                                             lowerStatus.contains("forwarded_to_faculty") || 
+                                             "escalated".equalsIgnoreCase(mode);
+
+                        boolean isProcessed;
+                        if (isHodContext) {
+                            // HOD Rules: Forwarded is NEVER processed
+                            isProcessed = lowerStatus.equals("approved") || 
+                                         lowerStatus.contains("rejected") || 
+                                         lowerStatus.contains("cancelled") || 
+                                         lowerStatus.contains("expired") ||
+                                         lowerStatus.equals("booked") ||
+                                         lowerStatus.equals("used");
+                            
+                            if (lowerStatus.contains("forwarded")) isProcessed = false;
+                        } else {
+                            // Staff Rules: Forwarded IS processed (sent to HOD)
+                            isProcessed = lowerStatus.equals("approved") || 
+                                         lowerStatus.contains("rejected") || 
+                                         lowerStatus.contains("cancelled") || 
+                                         lowerStatus.contains("expired") ||
+                                         lowerStatus.equals("booked") ||
+                                         lowerStatus.equals("used") ||
+                                         lowerStatus.contains("forwarded");
                         }
 
                         Intent intent;
-                        // Determine context while allowing for live status override
-                        if (lowerStatus.contains("forwarded_to_faculty") || "escalated".equalsIgnoreCase(mode)) {
-                            // HOD Context
+                        if (isHodContext) {
                             if (isProcessed) {
                                 intent = new Intent(context, com.example.hod.hod.HodCompletedRequestDetailActivity.class);
                             } else {
@@ -211,7 +224,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
                             }
                         }
 
-                        intent.putExtra("booking", latestBooking != null ? latestBooking : booking); 
+                        intent.putExtra("booking", booking); 
                         intent.putExtra("bookingId", bId);
                         intent.putExtra("requesterName", holder.tvUsername.getText().toString());
                         context.startActivity(intent);
