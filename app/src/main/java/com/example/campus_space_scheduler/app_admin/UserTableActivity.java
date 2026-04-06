@@ -142,14 +142,14 @@ public class UserTableActivity extends AppCompatActivity {
         String q = query == null ? "" : query.toLowerCase();
 
         for (DataNode node : fullList) {
+
             String primary = node.model.getPrimaryValue(mode);
             String secondary = node.model.getSecondaryValue(mode);
 
-            // Robust null safety for search filtering
-            boolean primaryMatch = primary != null && primary.toLowerCase().contains(q);
-            boolean secondaryMatch = secondary != null && secondary.toLowerCase().contains(q);
+            primary = primary == null ? "" : primary.toLowerCase();
+            secondary = secondary == null ? "" : secondary.toLowerCase();
 
-            if (primaryMatch || secondaryMatch) {
+            if (primary.contains(q) || secondary.contains(q)) {
                 filtered.add(node);
             }
         }
