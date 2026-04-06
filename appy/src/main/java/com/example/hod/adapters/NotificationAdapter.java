@@ -130,7 +130,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         } else {
             selectedIds.add(id);
         }
-        notifyDataSetChanged();
+        
+        for (int i = 0; i < notificationList.size(); i++) {
+            if (notificationList.get(i).getId() != null && notificationList.get(i).getId().equals(id)) {
+                notifyItemChanged(i);
+                break;
+            }
+        }
+        
         if (selectionListener != null) {
             selectionListener.onSelectionChanged(selectedIds.size());
         }
@@ -140,7 +147,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         for (NotificationModel notification : notificationList) {
             selectedIds.add(notification.getId());
         }
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
         if (selectionListener != null) {
             selectionListener.onSelectionChanged(selectedIds.size());
         }
@@ -148,7 +155,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public void clearSelection() {
         selectedIds.clear();
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
         if (selectionListener != null) {
             selectionListener.onSelectionChanged(selectedIds.size());
         }
@@ -158,7 +165,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if (this.isSelectionMode == enabled) return; // Recursion safety guard
         this.isSelectionMode = enabled;
         if (!enabled) selectedIds.clear();
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
         if (selectionListener != null) {
             selectionListener.onSelectionChanged(selectedIds.size());
         }
@@ -219,32 +226,46 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         if (status == null) status = "pending";
                         String lowerStatus = status.toLowerCase();
 
-                        // Live status determines processing state
-                        boolean isProcessed = lowerStatus.equals("approved") || 
-                                            lowerStatus.contains("rejected") || 
-                                            lowerStatus.contains("cancelled") || 
-                                            lowerStatus.equals("booked") ||
-                                            lowerStatus.equals("used");
-
                         String hostActivity = context.getClass().getSimpleName();
-                        boolean isHodActivity = hostActivity.contains("Hod") || 
-                                              (roleTarget.equals("hod"));
+                        boolean isHodContext = hostActivity.contains("Hod") || 
+                                              (roleTarget.equals("hod")) ||
+                                              lowerStatus.contains("forwarded_to_hod") ||
+                                              lowerStatus.contains("forwarded_to_faculty");
 
-                        // Parse the full booking object to avoid empty detail pages
+                        // Use the existing booking object but update its status from the live check
                         com.example.hod.models.Booking booking = snapshot.getValue(com.example.hod.models.Booking.class);
                         if (booking != null && booking.getBookingId() == null) {
                             booking.setBookingId(snapshot.getKey());
                         }
 
                         Intent intent;
-                        if (isHodActivity) {
-                            if (isProcessed) {
+                        if (isHodContext) {
+                            // HOD Rules: Forwarded is NEVER processed
+                            boolean isProcessedHOD = lowerStatus.equals("approved") || 
+                                                 lowerStatus.contains("rejected") || 
+                                                 lowerStatus.contains("cancelled") || 
+                                                 lowerStatus.contains("expired") ||
+                                                 lowerStatus.equals("booked") ||
+                                                 lowerStatus.equals("used");
+                            
+                            if (lowerStatus.contains("forwarded")) isProcessedHOD = false;
+
+                            if (isProcessedHOD) {
                                 intent = new Intent(context, HodCompletedRequestDetailActivity.class);
                             } else {
                                 intent = new Intent(context, HodRequestDetailActivity.class);
                             }
                         } else {
-                            if (isProcessed) {
+                            // Staff/Other Rules
+                            boolean isProcessedOther = lowerStatus.equals("approved") || 
+                                                  lowerStatus.contains("rejected") || 
+                                                  lowerStatus.contains("cancelled") || 
+                                                  lowerStatus.contains("expired") ||
+                                                  lowerStatus.equals("booked") ||
+                                                  lowerStatus.equals("used") ||
+                                                  lowerStatus.contains("forwarded");
+
+                            if (isProcessedOther) {
                                 intent = new Intent(context, StaffCompletedRequestDetailActivity.class);
                             } else {
                                 intent = new Intent(context, RequestDetailActivity.class);
@@ -274,10 +295,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                              message.contains("new booking request");
 
         String hostActivity = context.getClass().getSimpleName();
-        boolean isHodActivity = hostActivity.contains("Hod");
+        boolean isHodContext = hostActivity.contains("Hod") || status.contains("forwarded_to_hod");
 
         Intent intent;
-        if (isHodActivity) {
+        if (isHodContext) {
             if (isActionable) intent = new Intent(context, HodRequestDetailActivity.class);
             else intent = new Intent(context, HodCompletedRequestDetailActivity.class);
         } else {

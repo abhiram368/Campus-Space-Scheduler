@@ -148,12 +148,17 @@ public class HodRequestDetailActivity extends AppCompatActivity {
 
         // Redirection Guard: If already processed, go to Completed Detail
         String status = booking.getStatus() != null ? booking.getStatus().toLowerCase() : "";
-        if (status.equals("approved") || status.contains("rejected") || status.equals("cancelled") || status.equals("booked") || status.equals("used")) {
-            Intent intent = new Intent(this, HodCompletedRequestDetailActivity.class);
-            intent.putExtra("booking", booking);
-            startActivity(intent);
-            finish();
-            return;
+        
+        // Redirection Guard: Only redirect if status is truly processed AND NOT forwarded
+        if (!status.contains("forwarded")) {
+            if (status.equals("approved") || status.contains("rejected") || status.equals("cancelled") || status.equals("booked") || status.equals("used")) {
+                Intent intent = new Intent(this, HodCompletedRequestDetailActivity.class);
+                intent.putExtra("booking", booking);
+                intent.putExtra("bookingId", booking.getBookingId());
+                startActivity(intent);
+                finish();
+                return;
+            }
         }
 
         tvLabName.setText(booking.getSpaceName() != null ? booking.getSpaceName() : "Unknown Lab");
