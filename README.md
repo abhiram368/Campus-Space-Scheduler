@@ -1,80 +1,220 @@
 # Campus Space Scheduler
 
-Campus Space Scheduler is a cross-platform, mobile-first campus space scheduling system developed using Java (Android), XML (Android Layouts) and Firebase designed to manage and schedule the booking of academic spaces such as classrooms, laboratories, and halls within a campus. It helps avoid scheduling conflicts, improves space utilization, and provides a centralized platform for students, faculty, and administrators.
+![Platform](https://img.shields.io/badge/Platform-Android-green)
+![Backend](https://img.shields.io/badge/Backend-Firebase-orange)
+![Language](https://img.shields.io/badge/Language-Java-blue)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
+Campus Space Scheduler is a mobile-first Android application designed to manage and schedule campus spaces such as classrooms, laboratories, and halls. It provides a centralized and conflict-free booking system with role-based access and approval workflows.
+
+---
 
 ## Problem Statement
-Manual or fragmented scheduling of campus spaces often leads to conflicts, inefficient utilization, and lack of transparency. This system aims to provide a structured and automated solution for managing campus space bookings.
+
+Manual scheduling systems often lead to:
+
+* Booking conflicts
+* Inefficient resource usage
+* Lack of transparency
+
+This application solves these issues through automation and centralized control.
+
+---
 
 ## Features
-- Booking of classrooms, labs, and halls
-- Conflict-free scheduling
-- Role-based access (Admin / Faculty / Student)
-- View availability of campus spaces
-- Manage bookings and schedules centrally
 
-# Tech Stack:
-### Frontend (Client Application)
-- Java (Android) – Core application logic, activities, adapters, scheduling logic.
-- XML (Android Layouts) – UI layout design for screens such as login, profile, schedule view, and admin panels.
-- RecyclerView / Custom Views – Display weekly schedules and lists of bookings.
-### Backend / Cloud Services
-- Firebase Authentication – User login and identity management.
-- Firebase Realtime Database – Stores users, roles, bookings, and schedule data.
-- Firebase Cloud Functions (Node.js) – Admin operations such as creating users or enforcing backend logic.
-### Data & Access Control
-- Firebase Security Rules – Role-based access control (e.g., admin vs normal user).
-- JSON Data Structure – Data stored in hierarchical format in Realtime Database.
-### Development Tools
-- Android Studio – Main IDE for development.
-- Git + GitHub – Version control and collaboration.
-- Firebase CLI – Deploy cloud functions and manage backend.
-### Optional Supporting Libraries
-- Firebase SDK for Android
-- Material Components for Android – UI components and theming.
-### System Architecture
-- Client–Cloud architecture
-- Android app communicates directly with Firebase services through SDK.
-- Authentication controls access.
-- Cloud Functions handle privileged operations.
+* Classroom, Lab, and Hall booking
+* Conflict-free scheduling
+* Multi-level approval workflow
+* Role-based access control
+* Real-time availability tracking
+* Booking history and notifications
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* Java (Android)
+* XML (Layouts)
+* RecyclerView
+
+### Backend
+
+* Firebase Authentication
+* Firebase Realtime Database
+* Firebase Cloud Functions
+
+### Tools
+
+* Android Studio
+* GitHub
+* Firebase CLI
+
+---
+
+## System Architecture
+
+* Client–Cloud Architecture
+* Android app communicates directly with Firebase
+* Role-based authentication controls access
+* Cloud Functions handle secure operations
+
+---
+
 ## Project Structure
+
 ```
-campus-space-scheduler/
-├── docs/
-├── src/
-├── README.md
-├── CONTRIBUTING.md
-└── .gitignore
+3_Campus_Space_Scheduler/
+│
+├── app/
+│   ├── src/main/
+│   │   ├── java/...        # Activities, adapters, models
+│   │   ├── res/            # Layouts, drawables, values
+│   │   │   ├── layout/
+│   │   │   ├── drawable/
+│   │   │   └── values/
+│   │   └── AndroidManifest.xml
+│   ├── build.gradle
+│
+├── gradle/
+├── build.gradle
+├── settings.gradle
+└── README.md
 ```
 
-## Branching Rules
-- Do NOT work directly on the `main` branch.
-- Create a new branch for each task or feature.
+---
 
-Branch naming convention:
-- `feature/<feature-name>`
-- `fix/<bug-name>`
-- `docs/<documentation-name>`
+## Installation & Setup
 
-Example:
+### Prerequisites
+
+* Android Studio installed
+* Firebase account
+* Android device or emulator
+
+### Steps
+
+1. Clone the repository:
+
+   ```
+   git clone https://github.com/abhiram368/3_Campus_Space_Scheduler.git
+   ```
+
+2. Open project in Android Studio
+
+3. Connect Firebase:
+
+   * Go to Firebase Console
+   * Create a project
+   * Add Android app
+   * Download `google-services.json`
+   * Place it inside `/app`
+
+4. Enable Firebase services:
+
+   * Authentication (Email/Google)
+   * Realtime Database
+
+5. Sync Gradle and run the app
+
+---
+
+## Screenshots
+
+*Add your app screenshots here*
+
+```
+/screenshots/
+   ├── login.png
+   ├── dashboard.png
+   ├── booking.png
+   └── approval.png
+```
+
+---
+
+## User Roles
+
+* Student – Book spaces, upload LOR, view history
+* Faculty – Book labs/halls
+* Staff In-Charge – Approve/reject requests
+* Faculty In-Charge – Escalation approvals
+* HOD – Final approval
+* Admin – Manage users, roles, schedules
+
+---
 
 ## Workflow
-1. Create a new branch from `main`.
-2. Make changes and commit regularly with clear messages.
-3. Push your branch to GitHub.
-4. Create a Pull Request to `main`.
-5. Wait for at least one review before merging.
 
-## Commit Message Format
-Use clear and meaningful commit messages:
+1. User logs in using Firebase Authentication
+2. Selects space and submits booking request
+3. Request flows through approval hierarchy
+4. Final approval updates schedule
+5. Notifications are triggered
+
+---
+
+## Team Contributions
+
+| Name                | Roll Number | Contribution                  |
+| ------------------- | ----------- | ----------------------------- |
+| Ch. Teja            | B230267CS   | System design, SRS            |
+| K. Abhiram          | B230669CS   | Android development, Firebase |
+| A. Somanath         | B230154CS   | UI/UX design                  |
+| B. Venkata Subbaiah | B230871CS   | Backend logic                 |
+| B. Prashanth        | B2202226CS  | Testing and documentation     |
+
+---
+
+## Branching Strategy
+
+* feature/<feature-name>
+* fix/<bug-name>
+* docs/<docs-name>
+
+---
+
+## Contribution Workflow
+
+1. Create a branch from `main`
+2. Commit changes with clear messages
+3. Push branch
+4. Create Pull Request
+5. Get review before merge
+
+---
 
 ## Code Standards
-- Keep code clean and readable.
-- Comment important logic.
-- Do not commit unused or broken code.
 
-## Reporting Issues
-- Use GitHub Issues to report bugs or suggest improvements.
-- Provide clear steps to reproduce issues when possible.
+* Maintain clean and readable code
+* Follow consistent naming conventions
+* Comment important logic
+
+---
+
+## Future Enhancements
+
+* Google Calendar integration
+* Email notifications
+* Web admin dashboard
+* Analytics for space utilization
+
+---
+
+## Documentation
+
+* SRS Document (Version 2.0) 
+
+---
+
+## License
+
+This project is developed for academic purposes.
+
+---
 
 ## Academic Integrity
-This project is part of a college assignment. All contributions must be original and properly credited within the team.
+
+All contributions are original and developed as part of coursework.
